@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelpBudgetMe.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210225201435_initMigration")]
+    [Migration("20210228102656_initMigration")]
     partial class initMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,12 @@ namespace HelpBudgetMe.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Expenses");
                 });
@@ -62,6 +67,31 @@ namespace HelpBudgetMe.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Needs");
+                });
+
+            modelBuilder.Entity("HelpBudgetMe.Models.Paycheck", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Paycheck");
                 });
 
             modelBuilder.Entity("HelpBudgetMe.Models.Saving", b =>
@@ -98,6 +128,9 @@ namespace HelpBudgetMe.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("CurrentMoney")
+                        .HasColumnType("decimal(8,2)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -311,6 +344,15 @@ namespace HelpBudgetMe.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("HelpBudgetMe.Models.Expense", b =>
+                {
+                    b.HasOne("HelpBudgetMe.Models.User", "User")
+                        .WithMany("Expenses")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HelpBudgetMe.Models.Need", b =>
                 {
                     b.HasOne("HelpBudgetMe.Models.Expense", "Expense")
@@ -324,6 +366,15 @@ namespace HelpBudgetMe.Migrations
                         .IsRequired();
 
                     b.Navigation("Expense");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HelpBudgetMe.Models.Paycheck", b =>
+                {
+                    b.HasOne("HelpBudgetMe.Models.User", "User")
+                        .WithMany("Paychecks")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -415,7 +466,11 @@ namespace HelpBudgetMe.Migrations
 
             modelBuilder.Entity("HelpBudgetMe.Models.User", b =>
                 {
+                    b.Navigation("Expenses");
+
                     b.Navigation("Needs");
+
+                    b.Navigation("Paychecks");
 
                     b.Navigation("Savings");
 

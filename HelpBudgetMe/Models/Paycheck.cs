@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HelpBudgetMe.Models
 {
-    public class Expense
+    public class Paycheck
     {
         public int Id { get; set; }
         [Required]
@@ -17,7 +17,6 @@ namespace HelpBudgetMe.Models
         [Column(TypeName = "decimal(8,2)")]
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
-
         public User User { get; set; }
     }
 }

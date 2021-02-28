@@ -89,7 +89,7 @@ namespace HelpBudgetMe.Controllers
                 if (result.Succeeded)
                 {
                     await _signinManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 foreach(var error in result.Errors)
                 {
