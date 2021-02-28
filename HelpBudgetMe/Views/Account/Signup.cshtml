@@ -1,35 +1,31 @@
 ﻿@model HelpBudgetMe.Models.ViewModels.SignupViewModel
 
-<h2>Sign Up!</h2>
+
 <section>
-    <form id="signup" method="post" asp-controller="Account" asp-action="Signup">
+    <form class="signing" id="signup" method="post" asp-controller="Account" asp-action="Signup">
+        <h2 class="signing_title">Sign Up!</h2>
         <div asp-validation-summary="All"></div>
         <div>
-            <label asp-for="Name" ></label>
+            <label asp-for="Name"></label>
             <input asp-for="Name" />
-           
         </div>
         <div>
-            <label asp-for="Email" ></label>
+            <label asp-for="Email"></label>
             <input asp-for="Email" />
-          
         </div>
         <div>
-            <label asp-for="Password" ></label>
+            <label asp-for="Password"></label>
             <input asp-for="Password" />
-            
         </div>
         <div>
-            <label asp-for="ConfirmPassword" ></label>
+            <label asp-for="ConfirmPassword"></label>
             <input asp-for="ConfirmPassword" />
-            
+
         </div>
         <div>
-            <button type="submit">Sign Up!</button>
-        </div>
-        <p>
+            <button class="btn btn-action" type="submit">Create</button>
             <a asp-action="Signin">Sign In</a>
-        </p>
+        </div>
     </form>
 </section>
 

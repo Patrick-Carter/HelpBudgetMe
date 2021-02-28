@@ -24,6 +24,13 @@ li {
     list-style: none;
 }
 
+input:focus, input:hover {
+    border: solid 1px #76AF61;
+    background-color: #e8eee6;
+}
+
+
+
 /*NAV STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 
 h3 a {
@@ -152,6 +159,49 @@ nav, nav ul {
     font-size: 1rem;
     margin-bottom: 3.5rem;
 }
+
+/*Sign-in/up-------------------------------------------------------------------------------------------------------------------------------*/
+
+.signing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signing_title {
+    color: #0A0A0A;
+    font-size: 2.5em;
+    font-weight: 700;
+    margin: 2.5rem 0;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    font-size: 1.2em;
+}
+
+.signing input {
+    font-size: 1.2em;
+    padding: .5ch;
+    margin: 1rem 0;
+}
+
+.signing button, .signing a {
+    margin-top: 1.5rem;
+    margin-right: 1rem;
+    font-weight: 500;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+
+.signing_checkbox {
+    width: 100%;
+}
+
+
 
 /*UTILITY STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 .btn {

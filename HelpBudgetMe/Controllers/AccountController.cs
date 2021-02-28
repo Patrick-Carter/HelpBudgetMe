@@ -64,7 +64,7 @@ namespace HelpBudgetMe.Controllers
                 if (result.Succeeded)
                 {
                    
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 ModelState.AddModelError("", "invalid credintials");
             }

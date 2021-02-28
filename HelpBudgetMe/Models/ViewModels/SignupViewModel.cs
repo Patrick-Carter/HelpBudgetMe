@@ -15,7 +15,7 @@ namespace HelpBudgetMe.Models.ViewModels
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
-        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessage = "Password must have 1 uppercase letter, 1 lowcase, and 1 special charactor.")]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*1234567890).{6,}$", ErrorMessage = "Password must have 1 uppercase letter, 1 lowcase, and 1 number")]
         public string Password { get; set; }
         [Required]
         [Compare("Password", ErrorMessage = "Password and Confirm Password do not match.")]
