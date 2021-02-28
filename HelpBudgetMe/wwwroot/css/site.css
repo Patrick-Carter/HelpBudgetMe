@@ -1,0 +1,188 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800;900&family=Pacifico&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #FFF8F8;
+    font-size: 12px;
+}
+
+a {
+    text-decoration: none;
+    color: #0A0A0A;
+}
+
+li {
+    list-style: none;
+}
+
+/*NAV STYLES-------------------------------------------------------------------------------------------------------------------------------*/
+
+h3 a {
+    font-family: 'Pacifico', cursive;
+    padding: 1rem;
+    font-size: 1.1em;
+    padding-right: 0;
+    color: #0A0A0A;
+}
+
+
+nav, nav ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #76AF61;
+    position: sticky;
+}
+
+.nav_itemContainer {
+    padding: 1rem;
+    padding-left: 0;
+}
+
+.nav_item {
+    margin-left: .5rem;
+    font-weight: 500;
+    color: #0A0A0A;
+}
+
+/*FRONTPAGE STYLES-------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*SPLASH SECTION*/
+
+.headline {
+    position: relative;
+    height: 70vh;
+    margin-top: 1rem;
+    margin: 1rem;
+}
+
+.headline_watermark {
+    position: absolute;
+    font-weight: 200;
+    font-size: 20vh;
+    top: 0;
+    left: -5%;
+    opacity: .13;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+
+}
+
+.headline_hook {
+    position: absolute;
+    text-align: center;
+    font-weight: 900;
+    top: 10%;
+    font-size: 3em;
+    left: 0;
+}
+
+.headline_subheadline {
+    width: 50%;
+    margin-left: auto;
+    margin-right: 1rem;
+    font-weight: 600;
+}
+
+
+/*BUDGET SECTION*/
+
+.frontpage_section2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.circle {
+    width: 15rem;
+    height: 15rem;
+    border: solid .25rem #0A0A0A;
+    background-color: transparent;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-bottom: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle_text {
+    color: #76AF61;
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.section2_explainText {
+   font-weight: 800;
+   font-size: 2em;
+   margin-bottom: 7rem;
+}
+
+/*Liz Section*/
+
+.frontpage_section3 {
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section3_pic {
+    width: 15.25rem;
+    border-radius: 50%;
+    margin-bottom: 3.5rem;
+}
+
+.section3_text {
+    font-weight: 400;
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 3.5rem;
+}
+
+/*UTILITY STYLES-------------------------------------------------------------------------------------------------------------------------------*/
+.btn {
+    padding: .5rem;
+    border-radius: 13px;
+}
+
+.btn-action {
+    background-color: #F5F06D;
+    border: 2px solid #F5F06D;
+}
+
+.btn-action-large {
+    padding: 1em;
+    font-size: 2em;
+    background-color: #F5F06D;
+}
+
+.btn-outline {
+    border: 2px solid #F5F06D;
+}
+
+.line {
+    background-color: #0A0A0A;
+    height: .25rem;
+    width: 4rem;
+    margin: 7rem auto;
+}
+
+strong {
+    color: #76AF61;
+}
+
+

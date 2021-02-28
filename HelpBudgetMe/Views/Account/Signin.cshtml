@@ -1,0 +1,33 @@
+﻿@model HelpBudgetMe.Models.ViewModels.SigninViewModel
+
+<h2>Login Page</h2>
+<section>
+    <form id="signin" method="post" asp-controller="Account" asp-action="Signin">
+        <div asp-validation-summary="All"></div>
+        <div>
+            <label asp-for="Email" ></label>
+            <input asp-for="Email" />
+           
+        </div>
+        <div>
+            <label asp-for="Password" ></label>
+            <input asp-for="Password" />
+        
+        </div>
+        <div>
+            <label asp-for="RememberMe" ></label>
+            <input asp-for="RememberMe" />
+           
+        </div>
+        <div>
+            <button type="submit">Sign in</button>
+        </div>
+        <p>
+            <a asp-controller="Account" asp-action="Signup">Sign up</a>
+        </p>
+    </form>
+</section>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}
