@@ -19,7 +19,7 @@ namespace HelpBudgetMe.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("HelpBudgetMe.Models.Expense", b =>
+            modelBuilder.Entity("HelpBudgetMe.Models.Need", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,32 +38,10 @@ namespace HelpBudgetMe.Migrations
                         .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Expenses");
-                });
-
-            modelBuilder.Entity("HelpBudgetMe.Models.Need", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ExpenseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExpenseId");
 
                     b.HasIndex("UserId");
 
@@ -105,16 +83,22 @@ namespace HelpBudgetMe.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ExpenseId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExpenseId");
 
                     b.HasIndex("UserId");
 
@@ -216,16 +200,22 @@ namespace HelpBudgetMe.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ExpenseId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExpenseId");
 
                     b.HasIndex("UserId");
 
@@ -363,28 +353,13 @@ namespace HelpBudgetMe.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("HelpBudgetMe.Models.Expense", b =>
-                {
-                    b.HasOne("HelpBudgetMe.Models.User", "User")
-                        .WithMany("Expenses")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("HelpBudgetMe.Models.Need", b =>
                 {
-                    b.HasOne("HelpBudgetMe.Models.Expense", "Expense")
-                        .WithMany()
-                        .HasForeignKey("ExpenseId");
-
                     b.HasOne("HelpBudgetMe.Models.User", "User")
                         .WithMany("Needs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Expense");
 
                     b.Navigation("User");
                 });
@@ -400,34 +375,22 @@ namespace HelpBudgetMe.Migrations
 
             modelBuilder.Entity("HelpBudgetMe.Models.Saving", b =>
                 {
-                    b.HasOne("HelpBudgetMe.Models.Expense", "Expense")
-                        .WithMany()
-                        .HasForeignKey("ExpenseId");
-
                     b.HasOne("HelpBudgetMe.Models.User", "User")
                         .WithMany("Savings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Expense");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("HelpBudgetMe.Models.Want", b =>
                 {
-                    b.HasOne("HelpBudgetMe.Models.Expense", "Expense")
-                        .WithMany()
-                        .HasForeignKey("ExpenseId");
-
                     b.HasOne("HelpBudgetMe.Models.User", "User")
                         .WithMany("Wants")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Expense");
 
                     b.Navigation("User");
                 });
@@ -485,8 +448,6 @@ namespace HelpBudgetMe.Migrations
 
             modelBuilder.Entity("HelpBudgetMe.Models.User", b =>
                 {
-                    b.Navigation("Expenses");
-
                     b.Navigation("Needs");
 
                     b.Navigation("Paychecks");

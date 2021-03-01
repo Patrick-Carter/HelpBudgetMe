@@ -35,7 +35,6 @@ namespace HelpBudgetMe.Models
         public List<Need> Needs { get; set; }
         public List<Want> Wants { get; set; }
         public List<Saving> Savings { get; set; }
-        public List<Expense> Expenses { get; set; }
         public List<Paycheck> Paychecks { get; set; }
 
     }

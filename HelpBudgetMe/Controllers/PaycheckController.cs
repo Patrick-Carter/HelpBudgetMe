@@ -1,5 +1,6 @@
 ﻿using HelpBudgetMe.Data;
 using HelpBudgetMe.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace HelpBudgetMe.Controllers
 {
+    [Authorize]
     public class PaycheckController : Controller
     {
         private readonly ApplicationDBContext _db;
@@ -27,30 +29,43 @@ namespace HelpBudgetMe.Controllers
         public async Task<IActionResult> AddPaycheck(Paycheck model)
         {
             
-
-            string Id = _userManager.GetUserId(User);
-            User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
-
-
-            var paycheck = new Paycheck
+            if (ModelState.IsValid)
             {
-                Name = model.Name,
-                Amount = model.Amount,
-                User = currentUser,
-                DateCreated = DateTime.Now
-            };
+                try
+                {
+                    string Id = _userManager.GetUserId(User);
+                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
 
 
-            currentUser.CurrentMoney += model.Amount;
-            currentUser.AllTimeEarned += model.Amount;
-            currentUser.BudgetedForNeeds += (model.Amount * .5m);
-            currentUser.BudgetedForWants += (model.Amount * .3m);
-            currentUser.BudgetedForSavings += (model.Amount * .2m);
-            _db.Add(paycheck);
-            await _userManager.UpdateAsync(currentUser);
-            await _db.SaveChangesAsync();
+                    var paycheck = new Paycheck
+                    {
+                        Name = model.Name,
+                        Amount = model.Amount,
+                        User = currentUser,
+                        DateCreated = DateTime.Now
+                    };
 
-            return RedirectToAction("Index", "Dashboard");
+
+                    currentUser.CurrentMoney += model.Amount;
+                    currentUser.AllTimeEarned += model.Amount;
+                    currentUser.BudgetedForNeeds += (model.Amount * .5m);
+                    currentUser.BudgetedForWants += (model.Amount * .3m);
+                    currentUser.BudgetedForSavings += (model.Amount * .2m);
+                    _db.Add(paycheck);
+                    await _userManager.UpdateAsync(currentUser);
+                    await _db.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "Paycheck");
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+                
+            }
+
+            return BadRequest();
+            
         }
     }
 }

@@ -1,3 +1,140 @@
 ﻿@model HelpBudgetMe.Models.ViewModels.DashboardViewModel;
 
-<h2>@Model.CurrentMoney</h2>
+<main>
+    <section>
+        <h1>Dashboard</h1>
+        <div>
+            <h5>Current Budget Total</h5>
+            <h5>All-Time Earned</h5>
+            <h5>All-Time Spent</h5>
+        </div>
+        <div>
+            <h5><strong>@Model.CurrentMoney</strong></h5>
+            <h5><strong>@Model.AllTimeEarned</strong></h5>
+            <h5><strong>@Model.AllTimeSpent</strong></h5>
+        </div>
+    </section>
+    <section>
+        <h2>Paychecks</h2>
+        <div>
+            <a asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
+            <a asp-controller="Paycheck" asp-action="Index">See All</a>
+        </div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+            @if (Model.Paychecks != null)
+            {
+                @foreach (var item in Model.Paychecks)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Amount</td>
+                        <td>@item.DateCreated</td>
+                        <td>
+                            <a asp-controller="Paycheck" asp-action="EditPaycheck">Edit</a>
+                            <a asp-controller="Paycheck" asp-action="DeletePaycheck">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </section>
+    <section>
+        <h2>Needs</h2>
+        <div>
+            <a asp-controller="Need" asp-action="AddNeed">Add</a>
+            <a asp-controller="Need" asp-action="Index">See All</a>
+        </div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+            @if (Model.Needs != null)
+            {
+                @foreach (var item in Model.Needs)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Amount</td>
+                        <td>@item.DateCreated</td>
+                        <td>
+                            <a asp-controller="Need" asp-action="EditNeed">Edit</a>
+                            <a asp-controller="Need" asp-action="DeleteNeed">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+        <h5>Total Budget for Needs: <strong>@Model.NeedsBudget</strong></h5>
+    </section>
+    <section>
+        <h2>Wants</h2>
+        <div>
+            <a asp-controller="Want" asp-action="AddWant">Add</a>
+            <a asp-controller="Want" asp-action="Index">See All</a>
+        </div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+            @if (Model.Wants != null)
+            {
+                @foreach (var item in Model.Wants)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Amount</td>
+                        <td>@item.DateCreated</td>
+                        <td>
+                            <a asp-controller="Want" asp-action="EditWant">Edit</a>
+                            <a asp-controller="Want" asp-action="DeleteWant">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+        <h5>Total Budget for Wants: <strong>@Model.WantsBudget</strong></h5>
+    </section>
+    <section>
+        <h2>Savings</h2>
+        <div>
+            <a asp-controller="Saving" asp-action="AddSaving">Add</a>
+            <a asp-controller="Saving" asp-action="Index">See All</a>
+        </div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+            @if (Model.Savings != null)
+            {
+                @foreach (var item in Model.Savings)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Amount</td>
+                        <td>@item.DateCreated</td>
+                        <td>
+                            <a asp-controller="Saving" asp-action="EditSaving">Edit</a>
+                            <a asp-controller="Saving" asp-action="DeleteSaving">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+        <h5>Total Savings: <strong>@Model.SavingsBudget</strong></h5>
+    </section>
+</main>

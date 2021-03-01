@@ -13,8 +13,17 @@ namespace HelpBudgetMe.Models
         public int Id { get; set; }
         [Required]
         public User User { get; set; }
+
         [Required]
-        public Expense Expense { get; set; }
+        [MaxLength(40)]
+        public string Name { get; set; }
+        [Required]
+        [Column(TypeName = "decimal(8,2)")]
+        [DataType(DataType.Currency)]
+        public decimal Amount { get; set; }
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime DateCreated { get; set; }
 
     }
 }

@@ -19,6 +19,8 @@ namespace HelpBudgetMe.Models.ViewModels
 
         public decimal SavingsBudget { get; set; }
 
+        public List<Paycheck> Paychecks { get; set; }
+
         public decimal CurrentMoney { get; set; }
 
         public decimal AllTimeEarned { get; set; }

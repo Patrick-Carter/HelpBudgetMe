@@ -42,7 +42,6 @@ namespace HelpBudgetMe
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Signin";
-                options.ExpireTimeSpan = TimeSpan.FromDays(14);
             });
 
            

@@ -14,7 +14,6 @@ namespace HelpBudgetMe.Data
         {
             
         }
-        public DbSet<Expense> Expenses { get; set; }
 
         public DbSet<Need> Needs { get; set; }
 

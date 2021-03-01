@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace HelpBudgetMe.Controllers
 {
+    [Authorize]
     public class DashBoardController : Controller
     {
 
@@ -24,27 +25,37 @@ namespace HelpBudgetMe.Controllers
             _userManager = userManager;
         }
        
-        public IActionResult Index(DashboardViewModel model)
+        public async Task<IActionResult> Index()
         {
-
-            string Id = _userManager.GetUserId(User);
-
-            User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
-
-
-
-            model.CurrentMoney = currentUser.CurrentMoney;
-
+            User user;
             
-            /*model.Needs = currentUser.Needs;
-            model.NeedsBudget = currentUser.BudgetedForNeeds;
-            model.Wants = currentUser.Wants;
-            model.WantsBudget = currentUser.BudgetedForWants;
-            model.Savings = currentUser.Savings;
-            model.SavingsBudget = currentUser.BudgetedForSavings;
-            model.CurrentMoney = currentUser.CurrentMoney;
-            model.AllTimeEarned = currentUser.AllTimeEarned;
-            model.AllTimeSpent = currentUser.AllTimeSpent;*/
+            try {
+                string Id = _userManager.GetUserId(User);
+                user = await _db.Users
+                .Include(a => a.Needs).Take(10)
+                .Include(a => a.Wants).Take(10)
+                .Include(a => a.Savings).Take(10)
+                .Include(a => a.Paychecks).Take(10)
+                .Where(a => a.Id == Id)
+                .FirstOrDefaultAsync();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+            DashboardViewModel model = new DashboardViewModel();
+           
+            model.Needs = user.Needs;
+            model.Wants = user.Wants;
+            model.Savings = user.Savings;
+            model.Paychecks = user.Paychecks;
+            model.NeedsBudget = user.BudgetedForNeeds;
+            model.WantsBudget = user.BudgetedForWants;
+            model.SavingsBudget = user.BudgetedForSavings;
+            model.AllTimeEarned = user.AllTimeEarned;
+            model.AllTimeSpent = user.AllTimeSpent;
+            model.CurrentMoney = user.CurrentMoney;
 
             return  View(model);
         }

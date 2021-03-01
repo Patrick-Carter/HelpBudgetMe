@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HelpBudgetMe.Migrations
 {
-    public partial class initMigration : Migration
+    public partial class initDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,12 @@ namespace HelpBudgetMe.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    CurrentMoney = table.Column<decimal>(type: "decimal(8,2)", nullable: false, defaultValue: 0.00m),
+                    CurrentMoney = table.Column<decimal>(type: "decimal(12,2)", nullable: false, defaultValue: 0.00m),
+                    AllTimeEarned = table.Column<decimal>(type: "decimal(12,2)", nullable: false, defaultValue: 0.00m),
+                    AllTimeSpent = table.Column<decimal>(type: "decimal(12,2)", nullable: false, defaultValue: 0.00m),
+                    BudgetedForNeeds = table.Column<decimal>(type: "decimal(12,2)", nullable: false, defaultValue: 0.00m),
+                    BudgetedForWants = table.Column<decimal>(type: "decimal(12,2)", nullable: false, defaultValue: 0.00m),
+                    BudgetedForSavings = table.Column<decimal>(type: "decimal(12,2)", nullable: false, defaultValue: 0.00m),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -155,55 +160,15 @@ namespace HelpBudgetMe.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Expenses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Expenses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Expenses_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Paycheck",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Paycheck", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Paycheck_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Needs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ExpenseId = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -214,10 +179,26 @@ namespace HelpBudgetMe.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Paychecks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Paychecks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Needs_Expenses_ExpenseId",
-                        column: x => x.ExpenseId,
-                        principalTable: "Expenses",
+                        name: "FK_Paychecks_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -229,7 +210,9 @@ namespace HelpBudgetMe.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ExpenseId = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,12 +223,6 @@ namespace HelpBudgetMe.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Savings_Expenses_ExpenseId",
-                        column: x => x.ExpenseId,
-                        principalTable: "Expenses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,7 +232,9 @@ namespace HelpBudgetMe.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ExpenseId = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -266,12 +245,6 @@ namespace HelpBudgetMe.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Wants_Expenses_ExpenseId",
-                        column: x => x.ExpenseId,
-                        principalTable: "Expenses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -314,39 +287,19 @@ namespace HelpBudgetMe.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expenses_UserId",
-                table: "Expenses",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Needs_ExpenseId",
-                table: "Needs",
-                column: "ExpenseId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Needs_UserId",
                 table: "Needs",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Paycheck_UserId",
-                table: "Paycheck",
+                name: "IX_Paychecks_UserId",
+                table: "Paychecks",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Savings_ExpenseId",
-                table: "Savings",
-                column: "ExpenseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Savings_UserId",
                 table: "Savings",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Wants_ExpenseId",
-                table: "Wants",
-                column: "ExpenseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wants_UserId",
@@ -375,7 +328,7 @@ namespace HelpBudgetMe.Migrations
                 name: "Needs");
 
             migrationBuilder.DropTable(
-                name: "Paycheck");
+                name: "Paychecks");
 
             migrationBuilder.DropTable(
                 name: "Savings");
@@ -385,9 +338,6 @@ namespace HelpBudgetMe.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Expenses");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

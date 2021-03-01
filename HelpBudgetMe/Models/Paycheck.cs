@@ -9,6 +9,7 @@ namespace HelpBudgetMe.Models
 {
     public class Paycheck
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [MaxLength(40)]
