@@ -22,5 +22,7 @@ namespace HelpBudgetMe.Data
 
         public DbSet<Saving> Savings { get; set; }
 
+        public DbSet<Paycheck> Paychecks { get; set; }
+
     }
 }

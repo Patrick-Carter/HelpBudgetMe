@@ -4,14 +4,16 @@ using HelpBudgetMe.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HelpBudgetMe.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210301074730_IndividualBudgetTracking")]
+    partial class IndividualBudgetTracking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,10 +80,7 @@ namespace HelpBudgetMe.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("decimal(8,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -95,7 +94,7 @@ namespace HelpBudgetMe.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Paychecks");
+                    b.ToTable("Paycheck");
                 });
 
             modelBuilder.Entity("HelpBudgetMe.Models.Saving", b =>

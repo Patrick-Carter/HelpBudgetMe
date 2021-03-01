@@ -17,6 +17,9 @@ namespace HelpBudgetMe.Models
         [Column(TypeName = "decimal(8,2)")]
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime DateCreated { get; set; }
 
         public User User { get; set; }
     }

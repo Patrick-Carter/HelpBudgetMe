@@ -14,9 +14,14 @@ namespace HelpBudgetMe.Models
         [MaxLength(40)]
         public string Name { get; set; }
         [Required]
-        [Column(TypeName = "decimal(8,2)")]
+        [Column(TypeName = "decimal(12,2)")]
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime DateCreated { get; set; }
+
         public User User { get; set; }
     }
 }
