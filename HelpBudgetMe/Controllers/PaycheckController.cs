@@ -26,9 +26,18 @@ namespace HelpBudgetMe.Controllers
             return View();
         }
 
+        public IActionResult EditPaycheck(int Id)
+        {
+
+            Paycheck paycheck = _db.Paychecks.Where(a => a.Id == Id).FirstOrDefault();
+
+            return View(paycheck);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddPaycheck(Paycheck model)
         {
-            
+
             if (ModelState.IsValid)
             {
                 try
@@ -61,11 +70,22 @@ namespace HelpBudgetMe.Controllers
                 {
                     return BadRequest();
                 }
-                
+
             }
 
             return BadRequest();
-            
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPaycheck(Paycheck paycheck)
+        {
+
+            _db.Update(paycheck);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index", "Dashboard");
         }
     }
 }

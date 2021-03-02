@@ -17,8 +17,9 @@
     <section>
         <h2>Paychecks</h2>
         <div>
-            <a asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
-            <a asp-controller="Paycheck" asp-action="Index">See All</a>
+            <a asp-controller="Paycheck" asp-action="AddPaycheck">Add Paycheck</a>
+            <a asp-controller="Paycheck" asp-action="Index">All Paychecks</a>
+            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
         <table>
             <tr>
@@ -27,28 +28,31 @@
                 <th>Date</th>
                 <th>Action</th>
             </tr>
-            @if (Model.Paychecks != null)
-            {
-                @foreach (var item in Model.Paychecks)
+            <tbody>
+                @if (Model.Paychecks != null)
                 {
-                    <tr>
-                        <td>@item.Name</td>
-                        <td>@item.Amount</td>
-                        <td>@item.DateCreated</td>
-                        <td>
-                            <a asp-controller="Paycheck" asp-action="EditPaycheck">Edit</a>
-                            <a asp-controller="Paycheck" asp-action="DeletePaycheck">Delete</a>
-                        </td>
-                    </tr>
+                    @foreach (var item in Model.Paychecks)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>$@item.Amount</td>
+                            <td>@item.DateCreated.ToShortDateString()</td>
+                            <td>
+                                <a asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
+                                <a asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
                 }
-            }
+            </tbody>
         </table>
     </section>
     <section>
         <h2>Needs</h2>
         <div>
-            <a asp-controller="Need" asp-action="AddNeed">Add</a>
-            <a asp-controller="Need" asp-action="Index">See All</a>
+            <a asp-controller="Need" asp-action="AddNeed">Add Need</a>
+            <a asp-controller="Need" asp-action="Index">All Needs</a>
+            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
         <table>
             <tr>
@@ -63,11 +67,11 @@
                 {
                     <tr>
                         <td>@item.Name</td>
-                        <td>@item.Amount</td>
-                        <td>@item.DateCreated</td>
+                        <td>$@item.Amount</td>
+                        <td>@item.DateCreated.ToShortDateString()</td>
                         <td>
-                            <a asp-controller="Need" asp-action="EditNeed">Edit</a>
-                            <a asp-controller="Need" asp-action="DeleteNeed">Delete</a>
+                            <a asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
+                            <a asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }
@@ -78,8 +82,9 @@
     <section>
         <h2>Wants</h2>
         <div>
-            <a asp-controller="Want" asp-action="AddWant">Add</a>
-            <a asp-controller="Want" asp-action="Index">See All</a>
+            <a asp-controller="Want" asp-action="AddWant">Add Want</a>
+            <a asp-controller="Want" asp-action="Index">All Wants</a>
+            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
         <table>
             <tr>
@@ -94,11 +99,11 @@
                 {
                     <tr>
                         <td>@item.Name</td>
-                        <td>@item.Amount</td>
-                        <td>@item.DateCreated</td>
+                        <td>$@item.Amount</td>
+                        <td>@item.DateCreated.ToShortDateString()</td>
                         <td>
-                            <a asp-controller="Want" asp-action="EditWant">Edit</a>
-                            <a asp-controller="Want" asp-action="DeleteWant">Delete</a>
+                            <a asp-controller="Want" asp-action="EditWant" asp-route-Id="@item.Id">Edit</a>
+                            <a asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }
@@ -109,8 +114,9 @@
     <section>
         <h2>Savings</h2>
         <div>
-            <a asp-controller="Saving" asp-action="AddSaving">Add</a>
-            <a asp-controller="Saving" asp-action="Index">See All</a>
+            <a asp-controller="Saving" asp-action="AddSaving">Spend Savings</a>
+            <a asp-controller="Saving" asp-action="Index">All Savings</a>
+            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
         <table>
             <tr>
@@ -125,11 +131,11 @@
                 {
                     <tr>
                         <td>@item.Name</td>
-                        <td>@item.Amount</td>
-                        <td>@item.DateCreated</td>
+                        <td>$@item.Amount</td>
+                        <td>@item.DateCreated.ToShortDateString()</td>
                         <td>
-                            <a asp-controller="Saving" asp-action="EditSaving">Edit</a>
-                            <a asp-controller="Saving" asp-action="DeleteSaving">Delete</a>
+                            <a asp-controller="Saving" asp-action="EditSaving" asp-route-Id="@item.Id">Edit</a>
+                            <a asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }
