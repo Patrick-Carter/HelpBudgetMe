@@ -1,8 +1,8 @@
-﻿@model HelpBudgetMe.Models.ViewModels.PaycheckVM.EditPaycheckViewModel
+﻿@model HelpBudgetMe.Models.Paycheck
 
 <main>
-    <h1>Edit Paycheck</h1>
-    <form method="post" asp-controller="Paycheck" asp-action="EditPaycheck">
+    <h1>Delete Paycheck</h1>
+    <form method="post" asp-controller="Paycheck" asp-action="DeletePaycheck">
         <div>
             <label asp-for="Name"></label>
             <input value="@Model.Name" asp-for="Name" />
@@ -13,7 +13,6 @@
         </div>
         <input value="@Model.Id" asp-for="Id" hidden />
         <input value="@Model.DateCreated" asp-for="DateCreated" hidden />
-        <input value="@Model.PreviousAmount" asp-for="PreviousAmount" hidden />
-        <button type="submit">Update</button>
+        <button type="submit">Delete</button>
     </form>
 </main>

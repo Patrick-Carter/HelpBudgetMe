@@ -1,0 +1,17 @@
+﻿@model HelpBudgetMe.Models.Paycheck
+
+<main>
+    <form method="post" asp-controller="Paycheck" asp-action="AddPaycheck">
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+        </div>
+        <div>
+            <label asp-for="Amount"></label>
+            <input asp-for="Amount" />
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</main>
