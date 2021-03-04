@@ -1,0 +1,19 @@
+﻿@model HelpBudgetMe.Models.ViewModels.EditViewModel
+
+<main>
+    <h1>Edit Want</h1>
+    <form method="post" asp-controller="Want" asp-action="EditWant">
+        <div>
+            <label asp-for="Name"></label>
+            <input value="@Model.Name" asp-for="Name" />
+        </div>
+        <div>
+            <label asp-for="Amount"></label>
+            <input value="@Model.Amount" asp-for="Amount" />
+        </div>
+        <input value="@Model.Id" asp-for="Id" hidden />
+        <input value="@Model.DateCreated" asp-for="DateCreated" hidden />
+        <input value="@Model.PreviousAmount" asp-for="PreviousAmount" hidden />
+        <button type="submit">Update</button>
+    </form>
+</main>

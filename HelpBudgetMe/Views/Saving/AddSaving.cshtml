@@ -1,0 +1,18 @@
+﻿@model HelpBudgetMe.Models.ViewModels.AddViewModel
+
+<main>
+    <h1>Add Saving</h1>
+    <form method="post" asp-controller="Saving" asp-action="AddSaving">
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+        </div>
+        <div>
+            <label asp-for="Amount"></label>
+            <input asp-for="Amount" />
+        </div>
+        <div>
+            <button type="submit">Add</button>
+        </div>
+    </form>
+</main>

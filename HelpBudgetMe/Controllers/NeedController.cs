@@ -80,7 +80,7 @@ namespace HelpBudgetMe.Controllers
                     currentUser.BudgetedForNeeds -= model.Amount;
                     currentUser.AllTimeSpent += model.Amount;
                     await _userManager.UpdateAsync(currentUser);
-                    await _db.AddAsync(need);
+                    await _db.Needs.AddAsync(need);
                     await _db.SaveChangesAsync();
 
                     return RedirectToAction("Index", "Dashboard");
