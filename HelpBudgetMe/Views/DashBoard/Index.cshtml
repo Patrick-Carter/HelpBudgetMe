@@ -2,145 +2,173 @@
 
 <main>
     <section>
-        <h1>Dashboard</h1>
-        <div>
-            <h5>Current Budget Total</h5>
-            <h5>All-Time Earned</h5>
-            <h5>All-Time Spent</h5>
+        <h1 class="dashboard_headline">Dashboard</h1>
+        <div class="overview">
+            <div class="overview_itemContainer">
+                <h5 class="overview_itemTitle">Current Budget Total</h5>
+                <h5 class="overview_itemAmount"><strong>$@Model.CurrentMoney</strong></h5>
+            </div>
+            <div class="overview_itemContainer">
+                <h5 class="overview_itemTitle">All-Time Earned</h5>
+                <h5 class="overview_itemAmount"><strong>$@Model.AllTimeEarned</strong></h5>
+            </div>
+            <div class="overview_itemContainer">
+                <h5 class="overview_itemTitle">All-Time Spent</h5>
+                <h5 class="overview_itemAmount"><strong>$@Model.AllTimeSpent</strong></h5>
+            </div>
         </div>
         <div>
-            <h5><strong>@Model.CurrentMoney</strong></h5>
-            <h5><strong>@Model.AllTimeEarned</strong></h5>
-            <h5><strong>@Model.AllTimeSpent</strong></h5>
         </div>
     </section>
     <section>
-        <h2>Paychecks</h2>
-        <div>
-            <a asp-controller="Paycheck" asp-action="AddPaycheck">Add Paycheck</a>
-            <a asp-controller="Paycheck" asp-action="Index">All Paychecks</a>
-            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
+        <h2 class="dashboard_headline">Paychecks</h2>
+        <div class="expenseType_actions">
+            <a class="btn btn-action" asp-controller="Paycheck" asp-action="Index">View All</a>
+            <a class="btn btn-action" asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
+            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-            <tbody>
-                @if (Model.Paychecks != null)
-                {
+
+        @if (Model.Paychecks.Count > 0)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var item in Model.Paychecks)
                     {
                         <tr>
-                            <td>@item.Name</td>
-                            <td>$@item.Amount</td>
-                            <td>@item.DateCreated.ToShortDateString()</td>
-                            <td>
+                            <td data-heading="Name">@item.Name</td>
+                            <td data-heading="Amount">$@item.Amount</td>
+                            <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
+                            <td data-heading="Actions">
                                 <a asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
                                 <a asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        }
+
     </section>
     <section>
-        <h2>Needs</h2>
-        <div>
-            <a asp-controller="Need" asp-action="AddNeed">Add Need</a>
-            <a asp-controller="Need" asp-action="Index">All Needs</a>
-            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
+        <h2 class="dashboard_headline">Needs</h2>
+        <div class="expenseType_actions">
+            <a class="btn btn-action" asp-controller="Need" asp-action="Index">View All</a>
+            <a class="btn btn-action" asp-controller="Need" asp-action="AddNeed">Add</a>
+            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-            @if (Model.Needs != null)
-            {
-                @foreach (var item in Model.Needs)
-                {
+
+        @if (Model.Needs.Count > 0)
+        {
+            <table>
+                <thead>
                     <tr>
-                        <td>@item.Name</td>
-                        <td>$@item.Amount</td>
-                        <td>@item.DateCreated.ToShortDateString()</td>
-                        <td>
-                            <a asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
-                            <a asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
-                        </td>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            }
-        </table>
-        <h5>Total Budget for Needs: <strong>@Model.NeedsBudget</strong></h5>
-    </section>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Needs)
+                    {
+                        <tr>
+                            <td data-heading="Name">@item.Name</td>
+                            <td data-heading="Amount">$@item.Amount</td>
+                            <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
+                            <td data-heading="Actions">
+                                <a class="table_actions" asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
+                                <a class="table_actions" asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+         }
+            
+            <h5 class="expenseType_amount">Budgeted for Needs: <strong>@Model.NeedsBudget</strong></h5>
+        </section>
     <section>
-        <h2>Wants</h2>
-        <div>
-            <a asp-controller="Want" asp-action="AddWant">Add Want</a>
-            <a asp-controller="Want" asp-action="Index">All Wants</a>
-            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
+        <h2 class="dashboard_headline">Wants</h2>
+        <div class="expenseType_actions">
+            <a class="btn btn-action" asp-controller="Want" asp-action="Index">View All</a>
+            <a class="btn btn-action" asp-controller="Want" asp-action="AddWant">Add</a>
+            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-            @if (Model.Wants != null)
-            {
-                @foreach (var item in Model.Wants)
-                {
+
+        @if (Model.Wants.Count > 0)
+        {
+            <table>
+                <thead>
                     <tr>
-                        <td>@item.Name</td>
-                        <td>$@item.Amount</td>
-                        <td>@item.DateCreated.ToShortDateString()</td>
-                        <td>
-                            <a asp-controller="Want" asp-action="EditWant" asp-route-Id="@item.Id">Edit</a>
-                            <a asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
-                        </td>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            }
-        </table>
-        <h5>Total Budget for Wants: <strong>@Model.WantsBudget</strong></h5>
-    </section>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Wants)
+                    {
+                        <tr>
+                            <td data-heading="Name">@item.Name</td>
+                            <td data-heading="Amount">$@item.Amount</td>
+                            <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
+                            <td data-heading="Actions">
+                                <a asp-controller="Want" asp-action="EditWant" asp-route-Id="@item.Id">Edit</a>
+                                <a asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+         }
+            
+        <h5 class="expenseType_amount">Budgeted for Wants: <strong>@Model.WantsBudget</strong></h5>
+        </section>
     <section>
-        <h2>Savings</h2>
-        <div>
-            <a asp-controller="Saving" asp-action="AddSaving">Spend Savings</a>
-            <a asp-controller="Saving" asp-action="Index">All Savings</a>
-            <a asp-controller="Transfer" asp-action="Index">Transfer</a>
+        <h2 class="dashboard_headline">Savings</h2>
+        <div class="expenseType_actions">
+            <a class="btn btn-action" asp-controller="Saving" asp-action="Index">View All</a>
+            <a class="btn btn-action" asp-controller="Saving" asp-action="AddSaving">Add</a>
+            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-            @if (Model.Savings != null)
-            {
-                @foreach (var item in Model.Savings)
-                {
+
+        @if (Model.Savings.Count > 0)
+        {
+            <table>
+                <thead>
                     <tr>
-                        <td>@item.Name</td>
-                        <td>$@item.Amount</td>
-                        <td>@item.DateCreated.ToShortDateString()</td>
-                        <td>
-                            <a asp-controller="Saving" asp-action="EditSaving" asp-route-Id="@item.Id">Edit</a>
-                            <a asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
-                        </td>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            }
-        </table>
-        <h5>Total Savings: <strong>@Model.SavingsBudget</strong></h5>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Savings)
+                    {
+                        <tr>
+                            <td data-heading="Name">@item.Name</td>
+                            <td data-heading="Amount">$@item.Amount</td>
+                            <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
+                            <td data-heading="Actions">
+                                <a asp-controller="Saving" asp-action="EditSaving" asp-route-Id="@item.Id">Edit</a>
+                                <a asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <h5 class="expenseType_amount">Total Savings: <strong>@Model.SavingsBudget</strong></h5>
     </section>
 </main>

@@ -202,6 +202,81 @@ label {
 }
 
 
+/*Dashboard STYLES-------------------------------------------------------------------------------------------------------------------------------*/
+
+.dashboard_headline {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 900;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    color: #0A0A0A;
+}
+
+.overview, .overview_itemContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.overview_itemContainer {
+    margin-bottom: 2rem;
+}
+
+.overview_itemTitle {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #0A0A0A;
+}
+
+.overview_itemAmount {
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+.expenseType_actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.expenseType_amount {
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+/*Table STYLES-------------------------------------------------------------------------------------------------------------------------------*/
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 3rem 0;
+    border: 1px #999 solid;
+}
+
+tbody tr:nth-child(2n-1) {
+    background: #cabebe;
+}
+
+th, td {
+    padding: .5rem;
+    text-align: left;
+    width: 8ch;
+    font-weight: 500;
+}
+
+.table_actions {
+
+}
+
+th {
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+
+
 
 /*UTILITY STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 .btn {
