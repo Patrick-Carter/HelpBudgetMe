@@ -47,8 +47,8 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
-                                <a asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
+                                <a  asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -84,8 +84,8 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a class="table_actions" asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
-                                <a class="table_actions" asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
+                                <a  asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger"  asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -123,7 +123,7 @@
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
                                 <a asp-controller="Want" asp-action="EditWant" asp-route-Id="@item.Id">Edit</a>
-                                <a asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
+                                <a class="danger" asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -137,7 +137,7 @@
         <h2 class="dashboard_headline">Savings</h2>
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Saving" asp-action="Index">View All</a>
-            <a class="btn btn-action" asp-controller="Saving" asp-action="AddSaving">Add</a>
+            <a class="btn btn-action" asp-controller="Saving" asp-action="AddSaving">Spend</a>
             <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
 
@@ -161,7 +161,7 @@
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
                                 <a asp-controller="Saving" asp-action="EditSaving" asp-route-Id="@item.Id">Edit</a>
-                                <a asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
+                                <a class="danger" asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }

@@ -13,6 +13,7 @@ for details on configuring this project to bundle and minify static web assets. 
 body {
     background-color: #FFF8F8;
     font-size: 12px;
+    color: #0A0A0A;
 }
 
 a {
@@ -239,6 +240,7 @@ label {
 .expenseType_actions {
     display: flex;
     justify-content: space-around;
+    margin-bottom: 2.5rem;
 }
 
 .expenseType_amount {
@@ -251,7 +253,7 @@ label {
 table {
     border-collapse: collapse;
     width: 100%;
-    margin: 3rem 0;
+    margin-bottom: 2.5rem;
     border: 1px #999 solid;
 }
 
@@ -266,8 +268,8 @@ th, td {
     font-weight: 500;
 }
 
-.table_actions {
-
+td a {
+    font-size: 1.1em;
 }
 
 th {
@@ -310,4 +312,11 @@ strong {
     color: #76AF61;
 }
 
+.danger {
+    color: #DA2F3A;
+}
+
+.clickable_link {
+    color: #76AF61;
+}
 
