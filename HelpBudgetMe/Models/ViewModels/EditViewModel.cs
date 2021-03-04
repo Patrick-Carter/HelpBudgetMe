@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HelpBudgetMe.Models.ViewModels.PaycheckVM
+namespace HelpBudgetMe.Models.ViewModels
 {
-    public class EditPaycheckViewModel
+    public class EditViewModel
     {
         [Key]
         public int Id { get; set; }

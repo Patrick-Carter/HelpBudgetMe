@@ -1,6 +1,6 @@
 ﻿using HelpBudgetMe.Data;
 using HelpBudgetMe.Models;
-using HelpBudgetMe.Models.ViewModels.PaycheckVM;
+using HelpBudgetMe.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +38,7 @@ namespace HelpBudgetMe.Controllers
         {
             Paycheck paycheck = _db.Paychecks.Where(a => a.Id == Id).FirstOrDefault();
 
-            var model = new EditPaycheckViewModel()
+            var model = new EditViewModel()
             {
                 Id = paycheck.Id,
                 Name = paycheck.Name,
@@ -70,9 +70,9 @@ namespace HelpBudgetMe.Controllers
                     User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
 
                     currentUser.CurrentMoney -= paycheck.Amount;
-                    currentUser.BudgetedForNeeds = currentUser.CurrentMoney * .5m;
-                    currentUser.BudgetedForWants = currentUser.CurrentMoney * .3m;
-                    currentUser.BudgetedForSavings = currentUser.CurrentMoney * .2m;
+                    currentUser.BudgetedForNeeds -= (paycheck.Amount * .5m);
+                    currentUser.BudgetedForWants -= (paycheck.Amount * .3m);
+                    currentUser.BudgetedForSavings -= (paycheck.Amount * .2m);
                     currentUser.AllTimeEarned -= paycheck.Amount;
                     await _userManager.UpdateAsync(currentUser);
                     _db.Paychecks.Remove(paycheck);
@@ -116,7 +116,7 @@ namespace HelpBudgetMe.Controllers
                     currentUser.BudgetedForNeeds += (model.Amount * .5m);
                     currentUser.BudgetedForWants += (model.Amount * .3m);
                     currentUser.BudgetedForSavings += (model.Amount * .2m);
-                    _db.Add(paycheck);
+                    await _db.Paychecks.AddAsync(paycheck);
                     await _userManager.UpdateAsync(currentUser);
                     await _db.SaveChangesAsync();
 
@@ -135,7 +135,7 @@ namespace HelpBudgetMe.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPaycheck(EditPaycheckViewModel model)
+        public async Task<IActionResult> EditPaycheck(EditViewModel model)
         {
             if (ModelState.IsValid) { 
                 try { 
@@ -154,13 +154,13 @@ namespace HelpBudgetMe.Controllers
                     decimal amountChanged = model.PreviousAmount - model.Amount;
 
                     currentUser.CurrentMoney -= amountChanged;
-                    currentUser.BudgetedForNeeds = currentUser.CurrentMoney * .5m;
-                    currentUser.BudgetedForWants = currentUser.CurrentMoney * .3m;
-                    currentUser.BudgetedForSavings = currentUser.CurrentMoney * .2m;
+                    currentUser.BudgetedForNeeds -= (amountChanged * .5m);
+                    currentUser.BudgetedForWants -= (amountChanged * .3m);
+                    currentUser.BudgetedForSavings -= (amountChanged * .2m);
                     currentUser.AllTimeEarned -= amountChanged;
 
                     await _userManager.UpdateAsync(currentUser);
-                    _db.Update(paycheck);
+                    _db.Paychecks.Update(paycheck);
                     _db.SaveChanges();
 
                     return RedirectToAction("Index", "Dashboard");
