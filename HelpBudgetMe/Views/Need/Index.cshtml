@@ -1,5 +1,10 @@
 ﻿@model HelpBudgetMe.Models.ViewModels.NeedsViewModel
 
+@{
+    ViewData["Title"] = "Needs";
+}
+
+
 <main>
     <h2 class="dashboard_headline pagestart">Needs</h2>
     <h5 class="expenseType_amount">Budgeted For Needs: <strong>$@Model.BudgetedForNeeds</strong></h5>
@@ -27,8 +32,8 @@
                         <td data-heading="Amount">$@item.Amount</td>
                         <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                         <td data-heading="Actions">
-                            <a asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
-                            <a class="danger" asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
+                            <a class="table_actions" asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
+                            <a class="danger table_actions" asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

@@ -1,11 +1,15 @@
 ﻿@model HelpBudgetMe.Models.ViewModels.PaychecksViewModel
 
+@{
+    ViewData["Title"] = "Paychecks";
+}
+
+
 <main>
     <h2 class="dashboard_headline pagestart">Paychecks</h2>
     <h5 class="expenseType_amount">All-Time Earned: <strong>$@Model.AllTimeEarned</strong></h5>
     <div class="expenseType_actions">
         <a class="btn btn-action" asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
-        <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
     </div>
 
     @if (Model.Paychecks.Count > 0)
@@ -27,8 +31,8 @@
                         <td data-heading="Amount">$@item.Amount</td>
                         <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                         <td data-heading="Actions">
-                            <a asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
-                            <a class="danger" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
+                            <a class="table_actions" asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
+                            <a class="danger table_actions" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

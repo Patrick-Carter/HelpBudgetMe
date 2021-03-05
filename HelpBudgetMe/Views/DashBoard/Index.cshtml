@@ -1,4 +1,9 @@
-﻿@model HelpBudgetMe.Models.ViewModels.DashboardViewModel;
+﻿@model HelpBudgetMe.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
 
 <main>
     <section>
@@ -25,7 +30,6 @@
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Paycheck" asp-action="Index">View All</a>
             <a class="btn btn-action" asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
-            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
 
         @if (Model.Paychecks.Count > 0)
@@ -47,8 +51,8 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
-                                <a class="danger" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
+                                <a class="table_actions" asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger table_actions" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -88,8 +92,8 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
-                                <a class="danger" asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
+                                <a class="table_actions" asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger table_actions" asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -130,8 +134,8 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a asp-controller="Want" asp-action="EditWant" asp-route-Id="@item.Id">Edit</a>
-                                <a class="danger" asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
+                                <a class="table_actions" asp-controller="Want" asp-action="EditWant" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger table_actions" asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -172,8 +176,8 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a asp-controller="Saving" asp-action="EditSaving" asp-route-Id="@item.Id">Edit</a>
-                                <a class="danger" asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
+                                <a class="table_actions" asp-controller="Saving" asp-action="EditSaving" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger table_actions" asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }

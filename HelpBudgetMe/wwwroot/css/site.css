@@ -279,13 +279,16 @@ th, td {
     font-weight: 500;
 }
 
-td a {
+.table_actions {
+    display: inline-block;
     font-size: 1.1em;
+    padding: .3rem 0;
 }
 
 th {
     font-size: 1.1em;
     font-weight: 700;
+    padding: .7rem .5rem;
 }
 
 

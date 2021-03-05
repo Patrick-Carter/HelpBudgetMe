@@ -1,5 +1,10 @@
 ﻿@model HelpBudgetMe.Models.ViewModels.SigninViewModel
 
+@{
+    ViewData["Title"] = "Sign-in";
+}
+
+
 
 <main>
     <form class="signing" id="signin" method="post" asp-controller="Account" asp-action="Signin">
@@ -14,7 +19,7 @@
             <input asp-for="Password" />
         </div>
         <div class="signing_remembermeContainer">
-            <label  asp-for="RememberMe"></label>
+            <label asp-for="RememberMe"></label>
             <input class="signing_checkbox" asp-for="RememberMe" />
         </div>
         <div>
@@ -25,5 +30,5 @@
 </main>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
