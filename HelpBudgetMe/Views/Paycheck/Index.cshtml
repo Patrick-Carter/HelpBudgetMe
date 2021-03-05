@@ -1,17 +1,39 @@
-﻿@model HelpBudgetMe.Models.Paycheck
+﻿@model HelpBudgetMe.Models.ViewModels.PaychecksViewModel
 
 <main>
-    <form method="post" asp-controller="Paycheck" asp-action="AddPaycheck">
-        <div>
-            <label asp-for="Name"></label>
-            <input asp-for="Name" />
+        <h2 class="dashboard_headline pagestart">Paychecks</h2>
+        <h5 class="expenseType_amount">All-Time Earned: <strong>$@Model.AllTimeEarned</strong></h5>
+        <div class="expenseType_actions">
+            <a class="btn btn-action" asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
+            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
         </div>
-        <div>
-            <label asp-for="Amount"></label>
-            <input asp-for="Amount" />
-        </div>
-        <div>
-            <button type="submit" >Submit</button>
-        </div>
-    </form>
+
+        @if (Model.Paychecks.Count > 0)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Paychecks)
+                    {
+                        <tr>
+                            <td data-heading="Name">@item.Name</td>
+                            <td data-heading="Amount">$@item.Amount</td>
+                            <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
+                            <td data-heading="Actions">
+                                <a asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p class="clickable_link pagebottom">Load More</p>
+        }
 </main>

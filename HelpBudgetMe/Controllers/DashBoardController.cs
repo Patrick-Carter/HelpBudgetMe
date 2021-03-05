@@ -66,8 +66,6 @@ namespace HelpBudgetMe.Controllers
             {
                 return BadRequest();
             }
-
-           
         }
     }
 }

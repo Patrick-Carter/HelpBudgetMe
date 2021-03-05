@@ -48,7 +48,12 @@ nav, nav ul {
     justify-content: space-between;
     align-items: center;
     background-color: #76AF61;
-    position: sticky;
+}
+
+nav {
+    position: fixed;
+    width: 100%;
+    top: 0;
 }
 
 .nav_itemContainer {
@@ -248,6 +253,11 @@ label {
     text-align: center;
     margin-bottom: 2.5rem;
 }
+
+.expenseType_none {
+    text-align: center;
+    padding: 0 1.5rem;
+}
 /*Table STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 
 table {
@@ -278,12 +288,12 @@ th {
 }
 
 
-
-
 /*UTILITY STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 .btn {
     padding: .5rem;
     border-radius: 13px;
+    width: 4.5rem;
+    text-align: center;
 }
 
 .btn-action {
@@ -317,6 +327,17 @@ strong {
 }
 
 .clickable_link {
-    color: #76AF61;
+    color: #CF686F;
+    text-decoration: underline solid currentcolor;
+    text-align: center;
+    cursor: pointer;
+}
+
+.pagebottom {
+    margin-bottom: 2.5rem;
+}
+
+.pagestart {
+    margin-top: 4.3rem;
 }
 

@@ -4,6 +4,7 @@ using HelpBudgetMe.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,29 @@ namespace HelpBudgetMe.Controllers
             _userManager = userManager;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                string Id = _userManager.GetUserId(User);
+                User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
+
+                var paychecks = _db.Paychecks.Where(a => a.User == currentUser).OrderByDescending(b => b.DateCreated).Take(10).ToList();
+
+                PaychecksViewModel model = new PaychecksViewModel()
+                {
+                    Paychecks = paychecks,
+                    AllTimeEarned = currentUser.AllTimeEarned
+                    
+                };
+
+                return View(model);
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
         [HttpGet]
 

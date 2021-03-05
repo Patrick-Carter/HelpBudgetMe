@@ -1,5 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model HelpBudgetMe.Models.ViewModels.SavingsViewModel
+
+<main>
+    <h2 class="dashboard_headline pagestart">Savings</h2>
+    <h5 class="expenseType_amount">Total Savings: <strong>$@Model.BudgetedForSavings</strong></h5>
+    <div class="expenseType_actions">
+        <a class="btn btn-action" asp-controller="Saving" asp-action="AddSavings">Add</a>
+        <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
+    </div>
+
+    @if (Model.Savings.Count > 0)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Savings)
+                {
+                    <tr>
+                        <td data-heading="Name">@item.Name</td>
+                        <td data-heading="Amount">$@item.Amount</td>
+                        <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
+                        <td data-heading="Actions">
+                            <a asp-controller="Saving" asp-action="EditSaving" asp-route-Id="@item.Id">Edit</a>
+                            <a class="danger" asp-controller="Saving" asp-action="DeleteSaving" asp-route-Id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p class="clickable_link pagebottom">Load More</p>
+    }
+    else
+    {
+        <h2 class="expenseType_none">You haven't spent any of your savings yet.</h2>
+    }
+
+
+</main>

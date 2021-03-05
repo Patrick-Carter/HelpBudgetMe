@@ -2,7 +2,7 @@
 
 <main>
     <section>
-        <h1 class="dashboard_headline">Dashboard</h1>
+        <h1 class="dashboard_headline pagestart">Dashboard</h1>
         <div class="overview">
             <div class="overview_itemContainer">
                 <h5 class="overview_itemTitle">Current Budget Total</h5>
@@ -93,7 +93,7 @@
             </table>
          }
             
-            <h5 class="expenseType_amount">Budgeted for Needs: <strong>@Model.NeedsBudget</strong></h5>
+            <h5 class="expenseType_amount">Budgeted for Needs: <strong>$@Model.NeedsBudget</strong></h5>
         </section>
     <section>
         <h2 class="dashboard_headline">Wants</h2>
@@ -131,7 +131,7 @@
             </table>
          }
             
-        <h5 class="expenseType_amount">Budgeted for Wants: <strong>@Model.WantsBudget</strong></h5>
+        <h5 class="expenseType_amount">Budgeted for Wants: <strong>$@Model.WantsBudget</strong></h5>
         </section>
     <section>
         <h2 class="dashboard_headline">Savings</h2>
@@ -169,6 +169,6 @@
             </table>
         }
 
-        <h5 class="expenseType_amount">Total Savings: <strong>@Model.SavingsBudget</strong></h5>
+        <h5 class="expenseType_amount">Total Savings: <strong>$@Model.SavingsBudget</strong></h5>
     </section>
 </main>

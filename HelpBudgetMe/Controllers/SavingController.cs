@@ -3,6 +3,7 @@ using HelpBudgetMe.Models;
 using HelpBudgetMe.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,28 @@ namespace HelpBudgetMe.Controllers
             _userManager = userManager;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                string Id = _userManager.GetUserId(User);
+                User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
+
+                var savings = _db.Savings.Where(a => a.User == currentUser).OrderByDescending(b => b.DateCreated).Take(10).ToList();
+
+                SavingsViewModel model = new SavingsViewModel()
+                {
+                    Savings = savings,
+                    BudgetedForSavings = currentUser.BudgetedForNeeds
+                };
+
+                return View(model);
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
         [HttpGet]
         public IActionResult AddSaving()
