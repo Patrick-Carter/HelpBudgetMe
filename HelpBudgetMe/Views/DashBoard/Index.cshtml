@@ -47,13 +47,17 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a  asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
+                                <a asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
                                 <a class="danger" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+        }
+        else
+        {
+            <h2 class="expenseType_none">You haven't added any paychecks yet.</h2>
         }
 
     </section>
@@ -84,17 +88,21 @@
                             <td data-heading="Amount">$@item.Amount</td>
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
-                                <a  asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
-                                <a class="danger"  asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
+                                <a asp-controller="Need" asp-action="EditNeed" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger" asp-controller="Need" asp-action="DeleteNeed" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-         }
-            
-            <h5 class="expenseType_amount">Budgeted for Needs: <strong>$@Model.NeedsBudget</strong></h5>
-        </section>
+        }
+        else
+        {
+            <h2 class="expenseType_none">You haven't added any needs yet.</h2>
+        }
+
+        <h5 class="expenseType_amount">Budgeted for Needs: <strong>$@Model.NeedsBudget</strong></h5>
+    </section>
     <section>
         <h2 class="dashboard_headline">Wants</h2>
         <div class="expenseType_actions">
@@ -129,10 +137,14 @@
                     }
                 </tbody>
             </table>
-         }
-            
+        }
+        else
+        {
+            <h2 class="expenseType_none">You haven't added any wants yet.</h2>
+        }
+
         <h5 class="expenseType_amount">Budgeted for Wants: <strong>$@Model.WantsBudget</strong></h5>
-        </section>
+    </section>
     <section>
         <h2 class="dashboard_headline">Savings</h2>
         <div class="expenseType_actions">
@@ -167,6 +179,10 @@
                     }
                 </tbody>
             </table>
+        }
+        else
+        {
+            <h2 class="expenseType_none">You haven't spent any savings yet.</h2>
         }
 
         <h5 class="expenseType_amount">Total Savings: <strong>$@Model.SavingsBudget</strong></h5>
