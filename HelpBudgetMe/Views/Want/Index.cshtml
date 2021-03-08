@@ -24,7 +24,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody">
                 @foreach (var item in Model.Wants)
                 {
                     <tr>
@@ -39,10 +39,94 @@
                 }
             </tbody>
         </table>
-        <p class="clickable_link pagebottom">Load More</p>
+        <p class="clickable_link pagebottom" id="loadmore">Load More</p>
     }
     else
     {
         <h2 class="expenseType_none">You haven't added any wants yet.</h2>
     }
 </main>
+<script>
+    let totalTabelItems = 10;
+
+    const tbody = document.getElementById("tbody");
+    let tr;
+    let tdName;
+    let tdAmount;
+    let tdDate;
+    let tdActions;
+    let aEdit;
+    let aDelete;
+    let dateString;
+    let newDate;
+    let formatedDate;
+
+
+
+
+    const loadMoreButton = document.getElementById("loadmore");
+
+    loadMoreButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+
+
+        console.log("Hello");
+
+        fetch('https://localhost:44357/api/GetMoreWant', {
+            method: "POST",
+            body: totalTabelItems,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then(json => {
+
+                totalTabelItems += 10;
+
+                for (i = 0; i < json.length; i++) {
+
+                    // convert date
+                    dateString = json[i].dateCreated;
+                    newDate = new Date(dateString);
+                    formatedDate = (newDate.getMonth() + 1) + "/" + newDate.getDate() + "/" + newDate.getFullYear();
+
+                    tr = document.createElement("tr");
+                    tdName = document.createElement("td");
+                    tdAmount = document.createElement("td");
+                    tdDate = document.createElement("td");
+                    tdActions = document.createElement("td");
+                    aEdit = document.createElement("a");
+                    aDelete = document.createElement("a");
+
+                    aEdit.innerText = "Edit";
+                    aEdit.classList.add("table_actions");
+                    aEdit.href = "/want/editwant/" + json[i].id;
+
+                    aDelete.innerText = "Delete";
+                    aDelete.classList.add("table_actions");
+                    aDelete.classList.add("danger");
+                    aDelete.href = "/want/deletewant/" + json[i].id;
+
+                    // create tabel data
+                    tdName.innerText = json[i].name;
+                    tdAmount.innerText = "$" + json[i].amount;
+                    tdDate.innerText = formatedDate;
+                    tdActions.append(aEdit);
+                    tdActions.append(aDelete);
+
+                    // add tabel data to table row
+                    tr.append(tdName);
+                    tr.append(tdAmount);
+                    tr.append(tdDate);
+                    tr.append(tdActions);
+
+                    //add table row to table body
+                    tbody.append(tr);
+                }
+
+            })
+            .catch(err => console.log(err))
+    });
+</script>

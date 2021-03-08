@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -178,6 +179,32 @@ namespace HelpBudgetMe.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("api/GetMoreNeed")]
+
+        public async Task<JsonResult> GetMorePaycheck()
+        {
+
+            // get req body and convert text to int
+            string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            int skip = 10;
+
+            try
+            {
+                skip = int.Parse(req);
+            }
+            catch
+            {
+                return Json("Something went wrong");
+            }
+
+            string Id = _userManager.GetUserId(User);
+
+            var needs = _db.Needs.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Skip(skip).Take(10).ToList();
+
+            return Json(needs);
         }
     }
 }
