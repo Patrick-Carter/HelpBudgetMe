@@ -2,12 +2,14 @@
 using HelpBudgetMe.Models;
 using HelpBudgetMe.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -200,14 +202,28 @@ namespace HelpBudgetMe.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/GetMorePaycheck")]
 
-        public JsonResult GetMorePaycheck()
+        public async Task<JsonResult> GetMorePaycheck()
         {
+            
+            // get req body and convert text to int
+            string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            int skip = 10;
+
+            try
+            {
+                skip = int.Parse(req);
+            }
+            catch
+            {
+                return Json("Something went wrong");
+            }
+            
             string Id = _userManager.GetUserId(User);
 
-            var paychecks = _db.Paychecks.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Take(10).ToList();
+            var paychecks = _db.Paychecks.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Skip(skip).Take(10).ToList();
 
             return Json(paychecks);
         }
