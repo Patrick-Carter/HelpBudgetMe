@@ -23,7 +23,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody">
                 @foreach (var item in Model.Paychecks)
                 {
                     <tr>
@@ -38,10 +38,37 @@
                 }
             </tbody>
         </table>
-        <p class="clickable_link pagebottom">Load More</p>
+        <p class="clickable_link pagebottom" id="loadmore">Load More</p>
     }
     else
     {
         <h2 class="expenseType_none">You haven't added any paychecks yet.</h2>
     }
 </main>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    let totalTabelItems = 5;
+
+    const tbody = document.getElementById("tbody");
+    const loadMoreButton = document.getElementById("loadmore");
+
+    loadMoreButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const tr = document.createElement("tr");
+
+        console.log("Hello");
+
+        fetch('https://localhost:44357/api/GetMorePaycheck', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then(json => console.log(json))
+            .catch(err => console.log(err))
+            
+    });
+
+</script>

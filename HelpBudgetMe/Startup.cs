@@ -32,8 +32,8 @@ namespace HelpBudgetMe
             );
 
             services.AddControllersWithViews();
-          
 
+         
             services.AddIdentity<User, IdentityRole>(options => {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireNonAlphanumeric = false;
