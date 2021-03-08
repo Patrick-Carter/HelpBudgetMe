@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 
@@ -197,8 +198,18 @@ namespace HelpBudgetMe.Controllers
             {
                 return View(model);
             }
+        }
 
-            
+        [HttpGet]
+        [Route("api/GetMorePaycheck")]
+
+        public JsonResult GetMorePaycheck()
+        {
+            string Id = _userManager.GetUserId(User);
+
+            var paychecks = _db.Paychecks.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Take(10).ToList();
+
+            return Json(paychecks);
         }
 
     }

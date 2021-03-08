@@ -45,7 +45,6 @@
         <h2 class="expenseType_none">You haven't added any paychecks yet.</h2>
     }
 </main>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     let totalTabelItems = 5;
 
@@ -68,7 +67,5 @@
             .then(response => response.json())
             .then(json => console.log(json))
             .catch(err => console.log(err))
-            
     });
-
 </script>
