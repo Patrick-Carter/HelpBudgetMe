@@ -38,7 +38,9 @@
                 }
             </tbody>
         </table>
+        <p class="loading hidden pagebottom" id="loading">Loading...</p>
         <p class="clickable_link pagebottom" id="loadmore">Load More</p>
+        <p class="clickable_link pagebottom hidden" id="allLoaded">All paychecks loaded</p>
     }
     else
     {
@@ -49,6 +51,10 @@
     let totalTabelItems = 10;
 
     const tbody = document.getElementById("tbody");
+    const loadMore = document.getElementById('loadmore');
+    const loading = document.getElementById('loading');
+    const allLoaded = document.getElementById('allLoaded');
+
     let tr;
     let tdName;
     let tdAmount;
@@ -60,17 +66,15 @@
     let newDate;
     let formatedDate;
 
+    if (totalTabelItems > tbody.childElementCount) {
+        loadMore.classList.add("hidden");
+    }
 
-    
-
-    const loadMoreButton = document.getElementById("loadmore");
-
-    loadMoreButton.addEventListener("click", (e) => {
+    loadMore.addEventListener("click", (e) => {
         e.preventDefault();
 
-        
-
-        console.log("Hello");
+        loadMore.classList.add("hidden");
+        loading.classList.remove("hidden");
 
         fetch('https://localhost:44357/api/GetMorePaycheck', {
             method: "POST",
@@ -110,7 +114,7 @@
 
                     // create tabel data
                     tdName.innerText = json[i].name;
-                    tdAmount.innerText = "$" + json[i].amount;
+                    tdAmount.innerText = "$" + json[i].amount.toFixed(2);
                     tdDate.innerText = formatedDate;
                     tdActions.append(aEdit);
                     tdActions.append(aDelete);
@@ -125,7 +129,17 @@
                     tbody.append(tr);
                 }
 
+                loading.classList.add("hidden");
+                if (totalTabelItems > tbody.childElementCount) {
+                    allLoaded.classList.remove("hidden");
+                } else {
+                    loadMore.classList.remove("hidden");
+                }
+
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                loadMore.classList.remove("hidden");
+                loading.classList.add("hidden");
+            });
     });
 </script>

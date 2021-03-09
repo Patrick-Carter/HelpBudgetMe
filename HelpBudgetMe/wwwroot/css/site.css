@@ -273,22 +273,25 @@ tbody tr:nth-child(2n-1) {
 }
 
 th, td {
-    padding: .5rem;
+    padding: .5em;
     text-align: left;
     width: 8ch;
     font-weight: 500;
+    line-height: 1.5em;
+    text-transform: capitalize;
 }
 
 .table_actions {
-    display: inline-block;
-    font-size: 1.1em;
-    padding: .3rem 0;
+    display: block;
+    font-size: 1em;
+    padding: .3em 0;
 }
 
 th {
     font-size: 1.1em;
     font-weight: 700;
-    padding: .7rem .5rem;
+    padding: 1em .5em;
+    text-transform: uppercase;
 }
 
 
@@ -296,7 +299,7 @@ th {
 .btn {
     padding: .5rem;
     border-radius: 13px;
-    width: 4.5rem;
+    min-width: 4.5rem;
     text-align: center;
 }
 
@@ -343,5 +346,30 @@ strong {
 
 .pagestart {
     margin-top: 4.3rem;
+}
+
+@keyframes loading {
+    0% {
+        opacity: 0
+    }
+
+    50% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
+    }
+}
+
+.loading {
+    animation: loading 700ms infinite ease-in-out;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
 }
 
