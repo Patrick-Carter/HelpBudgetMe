@@ -1,0 +1,28 @@
+﻿@model HelpBudgetMe.Models.ViewModels.TransferViewModel
+
+@{
+    ViewData["Title"] = "Transfer";
+}
+<main class="pagestart">
+    <h1>Transfer From Savings</h1>
+    <h5 class="expenseType_amount">Total Savings: <strong>$@Model.BudgetedForSavings</strong></h5>
+    <form method="post" asp-controller="Saving" asp-action="TransferFromSavings">
+        <div>
+            <h2>Transfer To Needs</h2>
+            <label asp-for="@Model.TransferToNeeds"></label>
+            <input value="@Model.TransferToNeeds" asp-for="TransferToNeeds" />
+            <span asp-validation-for="TransferToNeeds"></span>
+        </div>
+        <div>
+            <h2>Transfer To Wants</h2>
+            <label asp-for="@Model.TransferToWants"></label>
+            <input value="@Model.TransferToWants" asp-for="TransferToWants" />
+            <span asp-validation-for="TransferToWants"></span>
+        </div>
+        <button type="submit">Transfer</button>
+    </form>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -5,7 +5,7 @@
 }
 
 
-<main>
+<main class="pagestart">
     <h1>Edit Need</h1>
     <form method="post" asp-controller="Need" asp-action="EditNeed">
         <div>
@@ -22,3 +22,7 @@
         <button type="submit">Update</button>
     </form>
 </main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -70,7 +70,7 @@
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Need" asp-action="Index">View All</a>
             <a class="btn btn-action" asp-controller="Need" asp-action="AddNeed">Add</a>
-            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
+            <a class="btn btn-action" asp-controller="Need" asp-action="TransferFromNeeds">Transfer</a>
         </div>
 
         @if (Model.Needs.Count > 0)
@@ -112,7 +112,7 @@
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Want" asp-action="Index">View All</a>
             <a class="btn btn-action" asp-controller="Want" asp-action="AddWant">Add</a>
-            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
+            <a class="btn btn-action" asp-controller="Want" asp-action="TransferFromWants">Transfer</a>
         </div>
 
         @if (Model.Wants.Count > 0)
@@ -154,7 +154,7 @@
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Saving" asp-action="Index">View All</a>
             <a class="btn btn-action" asp-controller="Saving" asp-action="AddSaving">Spend</a>
-            <a class="btn btn-action" asp-controller="Transfer" asp-action="Index">Transfer</a>
+            <a class="btn btn-action" asp-controller="Saving" asp-action="TransferFromSavings">Transfer</a>
         </div>
 
         @if (Model.Savings.Count > 0)

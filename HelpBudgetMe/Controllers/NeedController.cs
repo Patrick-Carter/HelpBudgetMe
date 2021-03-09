@@ -78,6 +78,25 @@ namespace HelpBudgetMe.Controllers
             return View(need);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> TransferFromNeeds()
+        {
+            string Id = _userManager.GetUserId(User);
+            User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
+
+            var model = new TransferViewModel()
+            {
+                BudgetedForNeeds = currentUser.BudgetedForNeeds,
+                BudgetedForWants = currentUser.BudgetedForWants,
+                BudgetedForSavings = currentUser.BudgetedForSavings,
+                TransferToNeeds = 0m,
+                TransferToWants = 0m,
+                TransferToSavings = 0m
+            };
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddNeed(AddViewModel model)
@@ -179,6 +198,24 @@ namespace HelpBudgetMe.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TransferFromNeeds(TransferViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string UserId = _userManager.GetUserId(User);
+                User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
+
+                currentUser.BudgetedForNeeds -= (model.TransferToSavings + model.TransferToWants);
+                currentUser.BudgetedForWants += model.TransferToWants;
+                currentUser.BudgetedForSavings += model.TransferToSavings;
+                await _userManager.UpdateAsync(currentUser);
+
+                return RedirectToAction("Index", "Dashboard");
+            }
+            return View(model);
         }
 
         [HttpPost]
