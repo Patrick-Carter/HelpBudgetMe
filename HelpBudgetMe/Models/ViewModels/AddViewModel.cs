@@ -16,6 +16,7 @@ namespace HelpBudgetMe.Models.ViewModels
         [Required]
         [Column(TypeName = "decimal(8,2)")]
         [DataType(DataType.Currency)]
+        [Range(0, double.MaxValue, ErrorMessage = "value must be positive")]
         public decimal Amount { get; set; }
        
     }

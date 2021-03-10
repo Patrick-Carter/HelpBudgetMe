@@ -17,10 +17,12 @@ namespace HelpBudgetMe.Models.ViewModels
         [Required]
         [Column(TypeName = "decimal(12,2)")]
         [DataType(DataType.Currency)]
+        [Range(0, double.MaxValue, ErrorMessage = "amount must be positive")]
         public decimal Amount { get; set; }
         [Required]
         [Column(TypeName = "decimal(12,2)")]
         [DataType(DataType.Currency)]
+        
         public decimal PreviousAmount { get; set; }
 
         [Required]

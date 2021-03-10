@@ -5,19 +5,23 @@
 }
 
 
-<main>
-    <h1>Delete Paycheck</h1>
-    <form method="post" asp-controller="Paycheck" asp-action="DeletePaycheck">
+<main class="pagestart">
+    <form class="signing" method="post" asp-controller="Paycheck" asp-action="DeletePaycheck">
+        <h1 class="signing_title">Delete Paycheck</h1>
         <div>
             <label asp-for="Name"></label>
-            <input value="@Model.Name" asp-for="Name" />
+            <input readonly value="@Model.Name" asp-for="Name" />
         </div>
         <div>
             <label asp-for="Amount"></label>
-            <input value="@Model.Amount" asp-for="Amount" />
+            <input readonly value="@Model.Amount" asp-for="Amount" />
         </div>
         <input value="@Model.Id" asp-for="Id" hidden />
         <input value="@Model.DateCreated" asp-for="DateCreated" hidden />
-        <button type="submit">Delete</button>
+        <button class="btn btn-action" type="submit">Delete</button>
     </form>
 </main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

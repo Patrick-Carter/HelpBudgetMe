@@ -90,13 +90,14 @@ namespace HelpBudgetMe.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> DeletePaycheck(Paycheck paycheck)
+        public async Task<IActionResult> DeletePaycheck(Paycheck model)
         {
             if (ModelState.IsValid)
             {
                 try { 
                     string UserId = _userManager.GetUserId(User);
                     User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
+                    Paycheck paycheck = _db.Paychecks.Where(a => (a.Id == model.Id) && (a.User == currentUser)).FirstOrDefault();
 
                     currentUser.CurrentMoney -= paycheck.Amount;
                     currentUser.BudgetedForNeeds -= (paycheck.Amount * .5m);

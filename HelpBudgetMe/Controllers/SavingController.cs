@@ -172,7 +172,7 @@ namespace HelpBudgetMe.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> DeleteSaving(Saving saving)
+        public async Task<IActionResult> DeleteSaving(Saving model)
         {
             if (ModelState.IsValid)
             {
@@ -180,6 +180,7 @@ namespace HelpBudgetMe.Controllers
                 {
                     string UserId = _userManager.GetUserId(User);
                     User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
+                    Saving saving = _db.Savings.Where(a => (a.Id == model.Id) && (a.User == currentUser)).FirstOrDefault();
 
                     currentUser.CurrentMoney += saving.Amount;
                     currentUser.BudgetedForSavings += saving.Amount;

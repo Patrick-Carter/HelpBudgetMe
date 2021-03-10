@@ -5,20 +5,26 @@
 }
 
 
-<main>
-    <h1>Edit Want</h1>
-    <form method="post" asp-controller="Want" asp-action="EditWant">
+<main class="pagestart">
+    <form class="signing" method="post" asp-controller="Want" asp-action="EditWant">
+        <h1 class="signing_title">Edit Want</h1>
         <div>
             <label asp-for="Name"></label>
             <input value="@Model.Name" asp-for="Name" />
+            <span class="validationError danger" asp-validation-for="Name"></span>
         </div>
         <div>
             <label asp-for="Amount"></label>
             <input value="@Model.Amount" asp-for="Amount" />
+            <span class="validationError danger" asp-validation-for="Amount"></span>
         </div>
         <input value="@Model.Id" asp-for="Id" hidden />
         <input value="@Model.DateCreated" asp-for="DateCreated" hidden />
         <input value="@Model.PreviousAmount" asp-for="PreviousAmount" hidden />
-        <button type="submit">Update</button>
+        <button class="btn btn-action" type="submit">Update</button>
     </form>
 </main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

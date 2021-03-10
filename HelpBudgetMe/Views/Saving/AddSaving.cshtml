@@ -5,19 +5,25 @@
 }
 
 
-<main>
-    <h1>Add Saving</h1>
-    <form method="post" asp-controller="Saving" asp-action="AddSaving">
+<main class="pagestart">
+    <form class="signing" method="post" asp-controller="Saving" asp-action="AddSaving">
+        <h1 class="signing_title">Spend Savings</h1>
         <div>
             <label asp-for="Name"></label>
             <input asp-for="Name" />
+            <span class="validationError danger" asp-validation-for="Name"></span>
         </div>
         <div>
             <label asp-for="Amount"></label>
             <input asp-for="Amount" />
+            <span class="validationError danger" asp-validation-for="Amount"></span>
         </div>
         <div>
-            <button type="submit">Add</button>
+            <button class="btn btn-action" type="submit">Spend</button>
         </div>
     </form>
 </main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -172,7 +172,7 @@ namespace HelpBudgetMe.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> DeleteNeed(Need need)
+        public async Task<IActionResult> DeleteNeed(Need model)
         {
             if (ModelState.IsValid)
             {
@@ -180,6 +180,7 @@ namespace HelpBudgetMe.Controllers
                 {
                     string UserId = _userManager.GetUserId(User);
                     User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
+                    Need need = _db.Needs.Where(a => (a.Id == model.Id) && (a.User == currentUser)).FirstOrDefault();
 
                     currentUser.CurrentMoney += need.Amount;
                     currentUser.BudgetedForNeeds += need.Amount;
