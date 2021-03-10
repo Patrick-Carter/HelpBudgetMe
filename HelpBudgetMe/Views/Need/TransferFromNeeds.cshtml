@@ -4,22 +4,20 @@
     ViewData["Title"] = "Transfer";
 }
 <main class="pagestart">
-    <h1>Transfer From Needs</h1>
-    <h5 class="expenseType_amount">Budgeted for Needs: <strong>$@Model.BudgetedForNeeds</strong></h5>
-    <form method="post" asp-controller="Need" asp-action="TransferFromNeeds">
+    <form class="signing" method="post" asp-controller="Need" asp-action="TransferFromNeeds">
+        <h1 class="signing_title">Transfer From Needs</h1>
+        <h5 class="expenseType_amount">Budgeted for Needs: <strong>$@Model.BudgetedForNeeds</strong></h5>
         <div>
-            <h2>Transfer To Wants</h2>
-            <label asp-for="@Model.TransferToWants"></label>
+            <label asp-for="@Model.TransferToWants">Transfer To Wants</label>
             <input value="@Model.TransferToWants" asp-for="TransferToWants" />
-            <span asp-validation-for="TransferToWants"></span>
+            <span class="validationError danger" asp-validation-for="TransferToWants"></span>
         </div>
         <div>
-            <h2>Transfer To Savings</h2>
-            <label asp-for="@Model.TransferToSavings"></label>
+            <label asp-for="@Model.TransferToSavings">Transfer To Savings</label>
             <input value="@Model.TransferToSavings" asp-for="TransferToSavings" />
-            <span asp-validation-for="TransferToSavings"></span>
+            <span class="validationError danger" asp-validation-for="TransferToSavings"></span>
         </div>
-        <button type="submit">Transfer</button>
+        <button class="btn btn-action" type="submit">Transfer</button>
     </form>
 </main>
 

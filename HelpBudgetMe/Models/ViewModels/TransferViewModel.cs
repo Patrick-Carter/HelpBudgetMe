@@ -21,17 +21,17 @@ namespace HelpBudgetMe.Models.ViewModels
         [Column(TypeName = "decimal(12,2)")]
         [DataType(DataType.Currency)]
         [Display(Name = "Amount")]
-        [Range(0, double.MaxValue, ErrorMessage = "Value must be positive")]
+        [Range(0, double.MaxValue, ErrorMessage = "amount must be positive")]
         public decimal TransferToNeeds { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         [DataType(DataType.Currency)]
         [Display(Name = "Amount")]
-        [Range(0, double.MaxValue, ErrorMessage = "Value must be positive")]
+        [Range(0, double.MaxValue, ErrorMessage = "amount must be positive")]
         public decimal TransferToWants { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         [DataType(DataType.Currency)]
         [Display(Name = "Amount")]
-        [Range(0, double.MaxValue, ErrorMessage = "Value must be positive")]
+        [Range(0, double.MaxValue, ErrorMessage = "amount must be positive")]
         public decimal TransferToSavings { get; set; }
     }
 }
