@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utility\Filters\" />
     <Folder Include="wwwroot\image\" />
   </ItemGroup>
 

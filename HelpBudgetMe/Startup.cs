@@ -1,5 +1,6 @@
 using HelpBudgetMe.Data;
 using HelpBudgetMe.Models;
+using HelpBudgetMe.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,7 +34,12 @@ namespace HelpBudgetMe
 
             services.AddControllersWithViews();
 
-         
+            services.AddHttpContextAccessor();
+            services.AddTransient<IItemFetcherService, ItemFetcherService>();
+            services.AddTransient<IVMGeneratorService, VMGeneratorService>();
+            services.AddTransient<IItemGeneratorService, ItemGeneratorService>();
+            services.AddTransient<IUserEditorService, UserEditorService>();
+
             services.AddIdentity<User, IdentityRole>(options => {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireNonAlphanumeric = false;

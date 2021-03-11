@@ -1,6 +1,7 @@
 ﻿using HelpBudgetMe.Data;
 using HelpBudgetMe.Models;
 using HelpBudgetMe.Models.ViewModels;
+using HelpBudgetMe.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,85 +17,86 @@ namespace HelpBudgetMe.Controllers
     [Authorize]
     public class NeedController : Controller
     {
+        private readonly IVMGeneratorService _vmGenerator;
+        private readonly IItemGeneratorService _itemGenerator;
+        private readonly IUserEditorService _userEditor;
+        private readonly IItemFetcherService _itemFetcherService;
 
-        private readonly ApplicationDBContext _db;
-        private readonly UserManager<User> _userManager;
-
-        public NeedController(ApplicationDBContext db, UserManager<User> userManager)
+        public NeedController(IVMGeneratorService vmGenerator,
+            IItemGeneratorService itemGenerator,
+            IUserEditorService userEditor,
+            IItemFetcherService itemFetcherService)
         {
-            _db = db;
-            _userManager = userManager;
+            _vmGenerator = vmGenerator;
+            _itemGenerator = itemGenerator;
+            _userEditor = userEditor;
+            _itemFetcherService = itemFetcherService;
         }
+
         [HttpGet]
+        // Index = GetAllNeeds()
         public async Task<IActionResult> Index()
         {
             try
             {
-                string Id = _userManager.GetUserId(User);
-                User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
-
-                var needs = _db.Needs.Where(a => a.User == currentUser).OrderByDescending(b => b.DateCreated).Take(10).ToList();
-
-                NeedsViewModel model = new NeedsViewModel()
-                {
-                    Needs = needs,
-                    BudgetedForNeeds = currentUser.BudgetedForNeeds
-                };
-
+                var model = await _vmGenerator.CreateNeededModelForNeedIndexAsync();
                 return View(model);
-
             }
             catch
             {
                 return BadRequest();
             }
         }
+
         [HttpGet]
         public IActionResult AddNeed()
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult EditNeed(int Id)
-        {
-            Need need = _db.Needs.Where(a => a.Id == Id).FirstOrDefault();
 
-            var model = new EditViewModel()
+        [HttpGet]
+        public async Task<IActionResult> EditNeed(int Id)
+        {
+            try 
             {
-                Id = need.Id,
-                Name = need.Name,
-                Amount = need.Amount,
-                PreviousAmount = need.Amount,
-                DateCreated = need.DateCreated
-            };
-
-            return View(model);
+                var model = await _vmGenerator.CreateNeededModelForEditNeedAsync(Id);
+                
+                return View(model);
+            }
+            catch 
+            {
+                return BadRequest();
+            }
         }
-        [HttpGet]
-        public IActionResult DeleteNeed(int Id)
-        {
-            Need need = _db.Needs.Where(a => a.Id == Id).FirstOrDefault();
 
-            return View(need);
+        [HttpGet]
+        public async Task<IActionResult> DeleteNeed(int Id)
+        {
+            try 
+            {
+                var model = await _vmGenerator.CreateNeededModelForDeleteNeedAsync(Id);
+
+                return View(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> TransferFromNeeds()
         {
-            string Id = _userManager.GetUserId(User);
-            User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
-
-            var model = new TransferViewModel()
+            try
             {
-                BudgetedForNeeds = currentUser.BudgetedForNeeds,
-                BudgetedForWants = currentUser.BudgetedForWants,
-                BudgetedForSavings = currentUser.BudgetedForSavings,
-                TransferToNeeds = 0m,
-                TransferToWants = 0m,
-                TransferToSavings = 0m
-            };
-
-            return View(model);
+                var model = await _vmGenerator.CreateNeededModelForTransferAsync();
+               
+                return View(model);
+            } 
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
@@ -105,23 +107,12 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
+                    await _itemGenerator.CreateNeedAndPushToDbAsync(model);
 
-                    Need need = new Need()
-                    {
-                        Name = model.Name,
-                        Amount = model.Amount,
-                        User = currentUser,
-                        DateCreated = DateTime.Now
-                    };
-
-                    currentUser.CurrentMoney -= model.Amount;
-                    currentUser.BudgetedForNeeds -= model.Amount;
-                    currentUser.AllTimeSpent += model.Amount;
-                    await _userManager.UpdateAsync(currentUser);
-                    await _db.Needs.AddAsync(need);
-                    await _db.SaveChangesAsync();
+                    // Now I update user money values to be accurate.
+                    await _userEditor.SubtractCurrentMoney(model.Amount);
+                    await _userEditor.SubtractBudgetedForNeeds(model.Amount);
+                    await _userEditor.AddToAllTimeSpent(model.Amount);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -132,31 +123,24 @@ namespace HelpBudgetMe.Controllers
             }
             return BadRequest();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> EditNeed(EditViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
-                    Need need = _db.Needs.Where(a => a.Id == model.Id).FirstOrDefault();
+                    await _itemGenerator.EditNeedAndPushToDbAsync(model);
                     
-
+                    // I must get the amount changed after the edit to update user money values
                     decimal amountChanged = model.PreviousAmount - model.Amount;
 
-                    currentUser.CurrentMoney += amountChanged;
-                    currentUser.AllTimeSpent -= amountChanged;
-                    currentUser.BudgetedForNeeds += amountChanged;
-                    await _userManager.UpdateAsync(currentUser);
-                    need.Amount = model.Amount;
-                    need.Name = model.Name;
-                    _db.Needs.Update(need);
-                    await _db.SaveChangesAsync();
-
+                    // Now I update user money values to be accurate.
+                    await _userEditor.AddCurrentMoney(amountChanged);
+                    await _userEditor.SubtractFromAllTimeSpent(amountChanged);
+                    await _userEditor.AddBudgetedForNeeds(amountChanged);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -164,11 +148,10 @@ namespace HelpBudgetMe.Controllers
                 {
                     return BadRequest();
                 }
-                
             }
-
             return BadRequest();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
 
@@ -178,16 +161,12 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string UserId = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
-                    Need need = _db.Needs.Where(a => (a.Id == model.Id) && (a.User == currentUser)).FirstOrDefault();
+                    await _itemGenerator.DeleteNeedAndPushToDbAsync(model);
 
-                    currentUser.CurrentMoney += need.Amount;
-                    currentUser.BudgetedForNeeds += need.Amount;
-                    currentUser.AllTimeSpent -= need.Amount;
-                    await _userManager.UpdateAsync(currentUser);
-                    _db.Needs.Remove(need);
-                    await _db.SaveChangesAsync();
+                    // Now I update user money values to be accurate.
+                    await _userEditor.AddCurrentMoney(model.Amount);
+                    await _userEditor.AddBudgetedForNeeds(model.Amount);
+                    await _userEditor.SubtractFromAllTimeSpent(model.Amount);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -206,13 +185,10 @@ namespace HelpBudgetMe.Controllers
         {
             if (ModelState.IsValid)
             {
-                string UserId = _userManager.GetUserId(User);
-                User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
-
-                currentUser.BudgetedForNeeds -= (model.TransferToSavings + model.TransferToWants);
-                currentUser.BudgetedForWants += model.TransferToWants;
-                currentUser.BudgetedForSavings += model.TransferToSavings;
-                await _userManager.UpdateAsync(currentUser);
+                // Now I update user money values to be accurate.
+                await _userEditor.SubtractBudgetedForNeeds(model.TransferToSavings + model.TransferToWants);
+                await _userEditor.AddBudgetedForWants(model.TransferToWants);
+                await _userEditor.AddBudgetedForSavings(model.TransferToSavings);
 
                 return RedirectToAction("Index", "Dashboard");
             }
@@ -221,10 +197,8 @@ namespace HelpBudgetMe.Controllers
 
         [HttpPost]
         [Route("api/GetMoreNeed")]
-
-        public async Task<JsonResult> GetMorePaycheck()
+        public async Task<JsonResult> GetMoreNeeds()
         {
-
             // get req body and convert text to int
             string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             int skip = 10;
@@ -232,17 +206,14 @@ namespace HelpBudgetMe.Controllers
             try
             {
                 skip = int.Parse(req);
+                List<Need> needs = await _itemFetcherService.GetMoreNeedsAsync(skip);
+
+                return Json(needs);
             }
             catch
             {
                 return Json("Something went wrong");
             }
-
-            string Id = _userManager.GetUserId(User);
-
-            var needs = _db.Needs.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Skip(skip).Take(10).ToList();
-
-            return Json(needs);
         }
     }
 }
