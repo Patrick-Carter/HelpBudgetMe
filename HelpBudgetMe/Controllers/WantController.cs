@@ -65,7 +65,7 @@ namespace HelpBudgetMe.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteWant(int Id)
         {
-            var model = await _vmGenerator.CreateNeededModelForDeleteWant(Id);
+            var model = await _vmGenerator.CreateNeededModelForDeleteWantAsync(Id);
             return View(model);
         }
 

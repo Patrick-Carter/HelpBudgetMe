@@ -18,6 +18,9 @@ namespace HelpBudgetMe.Services
         public Task<Paycheck> CreateNeededModelForDeletePaycheckAsync(int Id);
         public WantsViewModel CreateNeededModelForWantsIndex();
         public Task<EditViewModel> CreateNeededModelForEditWants(int Id);
-        public Task<Want> CreateNeededModelForDeleteWant(int Id);
+        public Task<Want> CreateNeededModelForDeleteWantAsync(int Id);
+        public SavingsViewModel CreateNeededModelForSavingIndex();
+        public Task<EditViewModel> CreateNeededModelForEditSavingAsync(int Id);
+        public Task<Saving> CreateNeededModelForDeleteSavingAsync(int Id);
     }
 }

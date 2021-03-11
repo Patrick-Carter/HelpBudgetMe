@@ -1,6 +1,7 @@
 ﻿using HelpBudgetMe.Data;
 using HelpBudgetMe.Models;
 using HelpBudgetMe.Models.ViewModels;
+using HelpBudgetMe.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,32 +16,28 @@ namespace HelpBudgetMe.Controllers
     public class SavingController : Controller
     {
 
-        private readonly ApplicationDBContext _db;
-        private readonly UserManager<User> _userManager;
+        private readonly IVMGeneratorService _vmGenerator;
+        private readonly IItemGeneratorService _itemGenerator;
+        private readonly IUserEditorService _userEditor;
+        private readonly IItemFetcherService _itemFetcherService;
 
-        public SavingController(ApplicationDBContext db, UserManager<User> userManager)
+        public SavingController(IVMGeneratorService vmGenerator,
+            IItemGeneratorService itemGenerator,
+            IUserEditorService userEditor,
+            IItemFetcherService itemFetcherService)
         {
-            _db = db;
-            _userManager = userManager;
+            _vmGenerator = vmGenerator;
+            _itemGenerator = itemGenerator;
+            _userEditor = userEditor;
+            _itemFetcherService = itemFetcherService;
         }
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
-                string Id = _userManager.GetUserId(User);
-                User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
-
-                var savings = _db.Savings.Where(a => a.User == currentUser).OrderByDescending(b => b.DateCreated).Take(10).ToList();
-
-                SavingsViewModel model = new SavingsViewModel()
-                {
-                    Savings = savings,
-                    BudgetedForSavings = currentUser.BudgetedForNeeds
-                };
-
+                var model = _vmGenerator.CreateNeededModelForSavingIndex();
                 return View(model);
-
             }
             catch
             {
@@ -53,46 +50,45 @@ namespace HelpBudgetMe.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult EditSaving(int Id)
+        public async Task<IActionResult> EditSaving(int Id)
         {
-            Saving saving = _db.Savings.Where(a => a.Id == Id).FirstOrDefault();
-
-            var model = new EditViewModel()
+            try
             {
-                Id = saving.Id,
-                Name = saving.Name,
-                Amount = saving.Amount,
-                PreviousAmount = saving.Amount,
-                DateCreated = saving.DateCreated
-            };
-
-            return View(model);
+                var model = await _vmGenerator.CreateNeededModelForEditSavingAsync(Id);
+                return View(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
         [HttpGet]
-        public IActionResult DeleteSaving(int Id)
+        public async Task<IActionResult> DeleteSaving(int Id)
         {
-            Saving saving = _db.Savings.Where(a => a.Id == Id).FirstOrDefault();
-
-            return View(saving);
+            try
+            {
+                var model = await _vmGenerator.CreateNeededModelForDeleteSavingAsync(Id);
+                return View(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
-        public async Task<IActionResult> TransferFromSavings()
+        public IActionResult TransferFromSavings()
         {
-            string Id = _userManager.GetUserId(User);
-            User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
-
-            var model = new TransferViewModel()
+            try
             {
-                BudgetedForNeeds = currentUser.BudgetedForNeeds,
-                BudgetedForWants = currentUser.BudgetedForWants,
-                BudgetedForSavings = currentUser.BudgetedForSavings,
-                TransferToNeeds = 0m,
-                TransferToWants = 0m,
-                TransferToSavings = 0m
-            };
+                var model = _vmGenerator.CreateNeededModelForTransfer();
 
-            return View(model);
+                return View(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
@@ -103,23 +99,11 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
+                    await _itemGenerator.CreateSavingAndPushToDbAsync(model);
 
-                    Saving saving = new Saving()
-                    {
-                        Name = model.Name,
-                        Amount = model.Amount,
-                        User = currentUser,
-                        DateCreated = DateTime.Now
-                    };
-
-                    currentUser.CurrentMoney -= model.Amount;
-                    currentUser.BudgetedForSavings -= model.Amount;
-                    currentUser.AllTimeSpent += model.Amount;
-                    await _userManager.UpdateAsync(currentUser);
-                    await _db.Savings.AddAsync(saving);
-                    await _db.SaveChangesAsync();
+                    await _userEditor.SubtractCurrentMoney(model.Amount);
+                    await _userEditor.SubtractBudgetedForSavings(model.Amount);
+                    await _userEditor.AddToAllTimeSpent(model.Amount);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -140,23 +124,15 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
-                    Saving saving = _db.Savings.Where(a => a.Id == model.Id).FirstOrDefault();
 
+                    await _itemGenerator.EditSavingAndPushToDbAsync(model);
 
                     decimal amountChanged = model.PreviousAmount - model.Amount;
 
-                    currentUser.CurrentMoney += amountChanged;
-                    currentUser.AllTimeSpent -= amountChanged;
-                    currentUser.BudgetedForSavings += amountChanged;
-                    await _userManager.UpdateAsync(currentUser);
-                    saving.Amount = model.Amount;
-                    saving.Name = model.Name;
-                    _db.Savings.Update(saving);
-                    await _db.SaveChangesAsync();
-
-
+                    await _userEditor.AddCurrentMoney(amountChanged);
+                    await _userEditor.SubtractFromAllTimeSpent(amountChanged);
+                    await _userEditor.AddBudgetedForSavings(amountChanged);
+                   
                     return RedirectToAction("Index", "Dashboard");
                 }
                 catch
@@ -178,17 +154,12 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string UserId = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
-                    Saving saving = _db.Savings.Where(a => (a.Id == model.Id) && (a.User == currentUser)).FirstOrDefault();
+                    await _itemGenerator.DeleteSavingAndPushToDbAsync(model);
 
-                    currentUser.CurrentMoney += saving.Amount;
-                    currentUser.BudgetedForSavings += saving.Amount;
-                    currentUser.AllTimeSpent -= saving.Amount;
-                    await _userManager.UpdateAsync(currentUser);
-                    _db.Savings.Remove(saving);
-                    await _db.SaveChangesAsync();
-
+                    await _userEditor.AddCurrentMoney(model.Amount);
+                    await _userEditor.AddBudgetedForSavings(model.Amount);
+                    await _userEditor.SubtractFromAllTimeSpent(model.Amount);
+                  
                     return RedirectToAction("Index", "Dashboard");
                 }
                 catch
@@ -206,14 +177,10 @@ namespace HelpBudgetMe.Controllers
         {
             if (ModelState.IsValid)
             {
-                string UserId = _userManager.GetUserId(User);
-                User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
-
-                currentUser.BudgetedForSavings -= (model.TransferToWants + model.TransferToNeeds);
-                currentUser.BudgetedForNeeds += model.TransferToNeeds;
-                currentUser.BudgetedForWants += model.TransferToWants;
-                await _userManager.UpdateAsync(currentUser);
-
+                await _userEditor.SubtractBudgetedForSavings(model.TransferToWants + model.TransferToNeeds);
+                await _userEditor.AddBudgetedForNeeds(model.TransferToNeeds);
+                await _userEditor.AddBudgetedForWants(model.TransferToWants);
+                
                 return RedirectToAction("Index", "Dashboard");
             }
             return View(model);
@@ -225,24 +192,24 @@ namespace HelpBudgetMe.Controllers
         public async Task<JsonResult> GetMorePaycheck()
         {
 
-            // get req body and convert text to int
-            string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            int skip = 10;
-
+            
             try
             {
+                // get req body and convert text to int
+                string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                int skip = 10;
+
                 skip = int.Parse(req);
+                List<Saving> savings = _itemFetcherService.GetMoreSavings(skip);
+
+                return Json(savings);
             }
             catch
             {
                 return Json("Something went wrong");
             }
 
-            string Id = _userManager.GetUserId(User);
-
-            var savings = _db.Savings.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Skip(skip).Take(10).ToList();
-
-            return Json(savings);
+            
         }
     }
 }

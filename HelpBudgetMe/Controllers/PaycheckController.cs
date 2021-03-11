@@ -140,7 +140,7 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    await _itemGenerator.DeletePaycheckAndPushToDbAstnc(model);
+                    await _itemGenerator.DeletePaycheckAndPushToDbAsync(model);
 
                     await _userEditor.SubtractCurrentMoney(model.Amount);
                     await _userEditor.SubtractBudgetedForNeeds(model.Amount * .5m);

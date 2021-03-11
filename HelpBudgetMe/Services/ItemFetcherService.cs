@@ -87,5 +87,23 @@ namespace HelpBudgetMe.Services
             var wants = _db.Wants.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
             return wants;
         }
+
+        public List<Saving> GetSavings(int amountToGet)
+        {
+            List<Saving> savings = _db.Savings.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
+            return savings;
+        }
+
+        public async Task<Saving> GetSpecificSavingAsync(int Id)
+        {
+            Saving saving = await _db.Savings.Where(a => (a.Id == Id) && (a.User == _user)).FirstOrDefaultAsync();
+            return saving;
+        }
+
+        public List<Saving> GetMoreSavings(int start)
+        {
+            var savings = _db.Savings.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
+            return savings;
+        }
     }
 }

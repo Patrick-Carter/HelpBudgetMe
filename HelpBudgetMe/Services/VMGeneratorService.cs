@@ -132,10 +132,47 @@ namespace HelpBudgetMe.Services
             return model;
         }
 
-        public async Task<Want> CreateNeededModelForDeleteWant(int Id)
+        public async Task<Want> CreateNeededModelForDeleteWantAsync(int Id)
         {
             Want want = await _itemFetcherService.GetSpecificWantAsync(Id);
             return want;
+        }
+
+        public SavingsViewModel CreateNeededModelForSavingIndex()
+        {
+            User currentUser = _itemFetcherService.GetUser();
+
+            var savings = _itemFetcherService.GetSavings(10);
+
+            SavingsViewModel model = new SavingsViewModel()
+            {
+                Savings = savings,
+                BudgetedForSavings = currentUser.BudgetedForSavings
+            };
+
+            return model;
+        }
+
+        public async Task<EditViewModel> CreateNeededModelForEditSavingAsync(int Id)
+        {
+            Saving saving = await _itemFetcherService.GetSpecificSavingAsync(Id);
+
+            var model = new EditViewModel()
+            {
+                Id = saving.Id,
+                Name = saving.Name,
+                Amount = saving.Amount,
+                PreviousAmount = saving.Amount,
+                DateCreated = saving.DateCreated
+            };
+
+            return model;
+        }
+
+        public async Task<Saving> CreateNeededModelForDeleteSavingAsync(int Id)
+        {
+            Saving saving = await _itemFetcherService.GetSpecificSavingAsync(Id);
+            return saving;
         }
     }
 }

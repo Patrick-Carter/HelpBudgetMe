@@ -18,5 +18,8 @@ namespace HelpBudgetMe.Services
         public List<Want> GetWants(int amountToGet);
         public Task<Want> GetSpecificWantAsync(int Id);
         public List<Want> GetMoreWants(int start);
+        public List<Saving> GetSavings(int amountToGet);
+        public Task<Saving> GetSpecificSavingAsync(int Id);
+        public List<Saving> GetMoreSavings(int start);
     }
 }

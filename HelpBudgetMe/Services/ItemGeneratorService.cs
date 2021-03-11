@@ -52,6 +52,22 @@ namespace HelpBudgetMe.Services
             await _db.SaveChangesAsync();
         }
 
+        public async Task CreateSavingAndPushToDbAsync(AddViewModel model)
+        {
+            User currentUser = _itemFetcherService.GetUser();
+
+            Saving saving = new Saving()
+            {
+                Name = model.Name,
+                Amount = model.Amount,
+                User = currentUser,
+                DateCreated = DateTime.Now
+            };
+
+            await _db.Savings.AddAsync(saving);
+            await _db.SaveChangesAsync();
+        }
+
         public async Task CreateWantAndPushToDbAsync(AddViewModel model)
         {
             User currentUser = _itemFetcherService.GetUser();
@@ -75,10 +91,17 @@ namespace HelpBudgetMe.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task DeletePaycheckAndPushToDbAstnc(Paycheck model)
+        public async Task DeletePaycheckAndPushToDbAsync(Paycheck model)
         {
             Paycheck paycheck =  await _itemFetcherService.GetSpecificPaycheckAsync(model.Id);
             _db.Paychecks.Remove(paycheck);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteSavingAndPushToDbAsync(Saving model)
+        {
+            Saving saving = await _itemFetcherService.GetSpecificSavingAsync(model.Id);
+            _db.Savings.Remove(saving);
             await _db.SaveChangesAsync();
         }
 
@@ -108,6 +131,17 @@ namespace HelpBudgetMe.Services
             paycheck.Name = model.Name;
 
             _db.Paychecks.Update(paycheck);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task EditSavingAndPushToDbAsync(EditViewModel model)
+        {
+            Saving saving = await _itemFetcherService.GetSpecificSavingAsync(model.Id);
+
+            saving.Amount = model.Amount;
+            saving.Name = model.Name;
+
+            _db.Savings.Update(saving);
             await _db.SaveChangesAsync();
         }
 
