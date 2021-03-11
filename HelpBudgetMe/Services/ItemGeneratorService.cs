@@ -22,7 +22,7 @@ namespace HelpBudgetMe.Services
         }
         public async Task CreateNeedAndPushToDbAsync(AddViewModel model)
         {
-            User currentUser = await _itemFetcherService.GetUserAsync();
+            User currentUser = _itemFetcherService.GetUser();
 
             Need need = new Need()
             {
@@ -38,7 +38,7 @@ namespace HelpBudgetMe.Services
 
         public async Task CreatePaycheckAndPushToDbAsync(AddViewModel model)
         {
-            User currentUser = await _itemFetcherService.GetUserAsync();
+            User currentUser = _itemFetcherService.GetUser();
 
             Paycheck paycheck = new Paycheck
             {
@@ -49,6 +49,22 @@ namespace HelpBudgetMe.Services
             };
 
             await _db.Paychecks.AddAsync(paycheck);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task CreateWantAndPushToDbAsync(AddViewModel model)
+        {
+            User currentUser = _itemFetcherService.GetUser();
+
+            Want want = new Want()
+            {
+                Name = model.Name,
+                Amount = model.Amount,
+                User = currentUser,
+                DateCreated = DateTime.Now
+            };
+
+            await _db.Wants.AddAsync(want);
             await _db.SaveChangesAsync();
         }
 
@@ -63,6 +79,13 @@ namespace HelpBudgetMe.Services
         {
             Paycheck paycheck =  await _itemFetcherService.GetSpecificPaycheckAsync(model.Id);
             _db.Paychecks.Remove(paycheck);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteWantAndPushToDbAsync(Want model)
+        {
+            Want want = await _itemFetcherService.GetSpecificWantAsync(model.Id);
+            _db.Wants.Remove(want);
             await _db.SaveChangesAsync();
         }
 
@@ -85,6 +108,17 @@ namespace HelpBudgetMe.Services
             paycheck.Name = model.Name;
 
             _db.Paychecks.Update(paycheck);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task EditWantAndPushToDbAsync(EditViewModel model)
+        {
+            Want want = await _itemFetcherService.GetSpecificWantAsync(model.Id);
+
+            want.Name = model.Name;
+            want.Amount = model.Amount;
+
+            _db.Wants.Update(want);
             await _db.SaveChangesAsync();
         }
     }

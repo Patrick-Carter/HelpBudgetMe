@@ -40,11 +40,11 @@ namespace HelpBudgetMe.Controllers
         }
         [HttpGet]
         // Index = GetAllPaychecks
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
-                PaychecksViewModel model = await _vmGenerator.CreateModelForPaycheckIndexAsync();
+                PaychecksViewModel model = _vmGenerator.CreateModelForPaycheckIndex();
                 return View(model);
             }
             catch
@@ -99,9 +99,7 @@ namespace HelpBudgetMe.Controllers
                 }
 
             }
-
             return BadRequest();
-
         }
 
         [HttpPost]
@@ -162,7 +160,6 @@ namespace HelpBudgetMe.Controllers
 
         [HttpPost]
         [Route("api/GetMorePaycheck")]
-
         public async Task<JsonResult> GetMorePaycheck()
         {
             try
@@ -173,7 +170,7 @@ namespace HelpBudgetMe.Controllers
 
                 skip = int.Parse(req);
 
-                List<Paycheck> paychecks = await _itemFetcherService.GetMorePaychecksAsync(skip);
+                List<Paycheck> paychecks = _itemFetcherService.GetMorePaychecks(skip);
 
                 return Json(paychecks);
             }
@@ -181,9 +178,6 @@ namespace HelpBudgetMe.Controllers
             {
                 return Json("Something went wrong");
             }
-            
-          
-            
         }
 
     }

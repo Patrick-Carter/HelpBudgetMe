@@ -1,6 +1,7 @@
 ﻿using HelpBudgetMe.Data;
 using HelpBudgetMe.Models;
 using HelpBudgetMe.Models.ViewModels;
+using HelpBudgetMe.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,33 +15,29 @@ namespace HelpBudgetMe.Controllers
 {
     public class WantController : Controller
     {
-        private readonly ApplicationDBContext _db;
-        private readonly UserManager<User> _userManager;
+        private readonly IVMGeneratorService _vmGenerator;
+        private readonly IItemGeneratorService _itemGenerator;
+        private readonly IUserEditorService _userEditor;
+        private readonly IItemFetcherService _itemFetcherService;
 
-        public WantController(ApplicationDBContext db, UserManager<User> userManager)
+        public WantController(IVMGeneratorService vmGenerator,
+            IItemGeneratorService itemGenerator,
+            IUserEditorService userEditor,
+            IItemFetcherService itemFetcherService)
         {
-            _db = db;
-            _userManager = userManager;
+            _vmGenerator = vmGenerator;
+            _itemGenerator = itemGenerator;
+            _userEditor = userEditor;
+            _itemFetcherService = itemFetcherService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
-                string Id = _userManager.GetUserId(User);
-                User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
-
-                var wants = _db.Wants.Where(a => a.User == currentUser).OrderByDescending(b => b.DateCreated).Take(10).ToList();
-
-                WantsViewModel model = new WantsViewModel()
-                {
-                    Wants = wants,
-                    BudgetedForWants = currentUser.BudgetedForWants
-                };
-
+                WantsViewModel model = _vmGenerator.CreateNeededModelForWantsIndex();
                 return View(model);
-
             }
             catch
             {
@@ -53,45 +50,29 @@ namespace HelpBudgetMe.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult EditWant(int Id)
+        public async Task<IActionResult> EditWant(int Id)
         {
-            Want want  = _db.Wants.Where(a => a.Id == Id).FirstOrDefault();
-
-            var model = new EditViewModel()
+            try
             {
-                Id = want.Id,
-                Name = want.Name,
-                Amount = want.Amount,
-                PreviousAmount = want.Amount,
-                DateCreated = want.DateCreated
-            };
-
+                var model = await _vmGenerator.CreateNeededModelForEditWants(Id);
+                return View(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> DeleteWant(int Id)
+        {
+            var model = await _vmGenerator.CreateNeededModelForDeleteWant(Id);
             return View(model);
         }
-        [HttpGet]
-        public IActionResult DeleteWant(int Id)
-        {
-            Want want = _db.Wants.Where(a => a.Id == Id).FirstOrDefault();
-
-            return View(want);
-        }
 
         [HttpGet]
-        public async Task<IActionResult> TransferFromWants()
+        public IActionResult TransferFromWants()
         {
-            string Id = _userManager.GetUserId(User);
-            User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
-
-            var model = new TransferViewModel()
-            {
-                BudgetedForNeeds = currentUser.BudgetedForNeeds,
-                BudgetedForWants = currentUser.BudgetedForWants,
-                BudgetedForSavings = currentUser.BudgetedForSavings,
-                TransferToNeeds = 0m,
-                TransferToWants = 0m,
-                TransferToSavings = 0m
-            };
-
+            var model = _vmGenerator.CreateNeededModelForTransfer();
             return View(model);
         }
 
@@ -103,23 +84,11 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
+                    await _itemGenerator.CreateWantAndPushToDbAsync(model);
 
-                    Want want = new Want()
-                    {
-                        Name = model.Name,
-                        Amount = model.Amount,
-                        User = currentUser,
-                        DateCreated = DateTime.Now
-                    };
-
-                    currentUser.CurrentMoney -= model.Amount;
-                    currentUser.BudgetedForWants -= model.Amount;
-                    currentUser.AllTimeSpent += model.Amount;
-                    await _userManager.UpdateAsync(currentUser);
-                    await _db.Wants.AddAsync(want);
-                    await _db.SaveChangesAsync();
+                    await _userEditor.SubtractCurrentMoney(model.Amount);
+                    await _userEditor.SubtractBudgetedForWants(model.Amount);
+                    await _userEditor.AddToAllTimeSpent(model.Amount);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -140,22 +109,13 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
-                    Want want = _db.Wants.Where(a => a.Id == model.Id).FirstOrDefault();
-
+                    await _itemGenerator.EditWantAndPushToDbAsync(model);
 
                     decimal amountChanged = model.PreviousAmount - model.Amount;
 
-                    currentUser.CurrentMoney += amountChanged;
-                    currentUser.AllTimeSpent -= amountChanged;
-                    currentUser.BudgetedForWants += amountChanged;
-                    await _userManager.UpdateAsync(currentUser);
-                    want.Amount = model.Amount;
-                    want.Name = model.Name;
-                    _db.Wants.Update(want);
-                    await _db.SaveChangesAsync();
-
+                    await _userEditor.AddCurrentMoney(amountChanged);
+                    await _userEditor.SubtractFromAllTimeSpent(amountChanged);
+                    await _userEditor.AddBudgetedForWants(amountChanged);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -178,16 +138,11 @@ namespace HelpBudgetMe.Controllers
             {
                 try
                 {
-                    string UserId = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
-                    Want want = _db.Wants.Where(a => (a.Id == model.Id) && (a.User == currentUser)).FirstOrDefault();
+                    await _itemGenerator.DeleteWantAndPushToDbAsync(model);
 
-                    currentUser.CurrentMoney += want.Amount;
-                    currentUser.BudgetedForWants += want.Amount;
-                    currentUser.AllTimeSpent -= want.Amount;
-                    await _userManager.UpdateAsync(currentUser);
-                    _db.Wants.Remove(want);
-                    await _db.SaveChangesAsync();
+                    await _userEditor.AddCurrentMoney(model.Amount);
+                    await _userEditor.AddBudgetedForWants(model.Amount);
+                    await _userEditor.SubtractFromAllTimeSpent(model.Amount);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -206,13 +161,9 @@ namespace HelpBudgetMe.Controllers
         {
             if (ModelState.IsValid)
             {
-                string UserId = _userManager.GetUserId(User);
-                User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
-
-                currentUser.BudgetedForWants -= (model.TransferToSavings + model.TransferToNeeds);
-                currentUser.BudgetedForNeeds += model.TransferToNeeds;
-                currentUser.BudgetedForSavings += model.TransferToSavings;
-                await _userManager.UpdateAsync(currentUser);
+                await _userEditor.SubtractBudgetedForWants(model.TransferToSavings + model.TransferToNeeds);
+                await _userEditor.AddBudgetedForNeeds(model.TransferToNeeds);
+                await _userEditor.AddBudgetedForSavings(model.TransferToSavings);
 
                 return RedirectToAction("Index", "Dashboard");
             }
@@ -224,25 +175,22 @@ namespace HelpBudgetMe.Controllers
 
         public async Task<JsonResult> GetMorePaycheck()
         {
-
-            // get req body and convert text to int
-            string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            int skip = 10;
-
             try
             {
+                // get req body and convert text to int
+                string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                int skip = 10;
                 skip = int.Parse(req);
+
+
+                var wants = _itemFetcherService.GetMoreWants(skip);
+
+                return Json(wants);
             }
             catch
             {
                 return Json("Something went wrong");
             }
-
-            string Id = _userManager.GetUserId(User);
-
-            var wants = _db.Wants.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Skip(skip).Take(10).ToList();
-
-            return Json(wants);
-        }
+        }    
     }
 }

@@ -35,11 +35,11 @@ namespace HelpBudgetMe.Controllers
 
         [HttpGet]
         // Index = GetAllNeeds()
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
-                var model = await _vmGenerator.CreateNeededModelForNeedIndexAsync();
+                var model =  _vmGenerator.CreateNeededModelForNeedIndex();
                 return View(model);
             }
             catch
@@ -60,7 +60,6 @@ namespace HelpBudgetMe.Controllers
             try 
             {
                 var model = await _vmGenerator.CreateNeededModelForEditNeedAsync(Id);
-                
                 return View(model);
             }
             catch 
@@ -75,7 +74,6 @@ namespace HelpBudgetMe.Controllers
             try 
             {
                 var model = await _vmGenerator.CreateNeededModelForDeleteNeedAsync(Id);
-
                 return View(model);
             }
             catch
@@ -85,11 +83,11 @@ namespace HelpBudgetMe.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> TransferFromNeeds()
+        public IActionResult TransferFromNeeds()
         {
             try
             {
-                var model = await _vmGenerator.CreateNeededModelForTransferAsync();
+                var model = _vmGenerator.CreateNeededModelForTransfer();
                
                 return View(model);
             } 
@@ -206,7 +204,7 @@ namespace HelpBudgetMe.Controllers
                 int skip = 10;
 
                 skip = int.Parse(req);
-                List<Need> needs = await _itemFetcherService.GetMoreNeedsAsync(skip);
+                List<Need> needs = _itemFetcherService.GetMoreNeeds(skip);
 
                 return Json(needs);
             }

@@ -16,6 +16,7 @@ namespace HelpBudgetMe.Services
         private readonly ApplicationDBContext _db;
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly User _user;
 
         public ItemFetcherService(ApplicationDBContext db,
             UserManager<User> userManager,
@@ -24,63 +25,67 @@ namespace HelpBudgetMe.Services
             _db = db;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _user = _userManager.GetUserAsync(httpContextAccessor.HttpContext.User)
+                .GetAwaiter()
+                .GetResult();
         }
-        public async Task<List<Need>> GetNeeds(int amountToGet)
+        public List<Need> GetNeeds(int amountToGet)
         {
-            User user = await GetUser();
-            List<Need> needs = _db.Needs.Where(a => a.User == user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
-
+            List<Need> needs = _db.Needs.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
             return needs;
         }
 
-        public async Task<User> GetUserAsync()
+        public  User GetUser()
         {
-            User user = await GetUser();
-            return user;
+            return _user;
         }
 
         public async Task<Need> GetSpecificNeedAsync(int Id)
         {
-            User user = await GetUser();
-            Need need = await _db.Needs.Where(a => (a.Id == Id) && (a.User == user)).FirstOrDefaultAsync();
+            Need need = await _db.Needs.Where(a => (a.Id == Id) && (a.User == _user)).FirstOrDefaultAsync();
             return need;
         }
 
-        public async Task<List<Need>> GetMoreNeedsAsync(int start)
+        public List<Need> GetMoreNeeds(int start)
         {
-            User user = await GetUser();
-            var needs = _db.Needs.Where(a => a.User == user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
-
+            var needs = _db.Needs.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
             return needs;
         }
 
-        public async Task<List<Paycheck>> GetPaychecks(int amountToGet)
+        public List<Paycheck> GetPaychecks(int amountToGet)
         {
-            User user = await GetUser();
-            List<Paycheck> paychecks = _db.Paychecks.Where(a => a.User == user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
-
+            List<Paycheck> paychecks = _db.Paychecks.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
             return paychecks;
         }
 
         public async Task<Paycheck> GetSpecificPaycheckAsync(int Id)
         {
-            User user = await GetUser();
-            Paycheck paycheck = await _db.Paychecks.Where(a => (a.Id == Id) && (a.User == user)).FirstOrDefaultAsync();
+            Paycheck paycheck = await _db.Paychecks.Where(a => (a.Id == Id) && (a.User == _user)).FirstOrDefaultAsync();
             return paycheck;
         }
 
-        public async Task<List<Paycheck>> GetMorePaychecksAsync(int start)
+        public List<Paycheck> GetMorePaychecks(int start)
         {
-            User user = await GetUser();
-            var paychecks = _db.Paychecks.Where(a => a.User == user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
-
+            var paychecks = _db.Paychecks.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
             return paychecks;
         }
 
-        private async Task<User> GetUser()
+        public List<Want> GetWants(int amountToGet)
         {
-            User user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-            return user;
+            List<Want> wants = _db.Wants.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
+            return wants;
+        }
+
+        public async Task<Want> GetSpecificWantAsync(int Id)
+        {
+            Want want = await _db.Wants.Where(a => (a.Id == Id) && (a.User == _user)).FirstOrDefaultAsync();
+            return want;
+        }
+
+        public List<Want> GetMoreWants(int start)
+        {
+            var wants = _db.Wants.Where(a => a.User == _user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
+            return wants;
         }
     }
 }

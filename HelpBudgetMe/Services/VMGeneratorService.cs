@@ -29,10 +29,10 @@ namespace HelpBudgetMe.Services
 
             return model;
         }
-        public async Task<NeedsViewModel> CreateNeededModelForNeedIndexAsync()
+        public NeedsViewModel CreateNeededModelForNeedIndex()
         {
-            User currentUser = await _itemFetcherService.GetUserAsync();
-            var needs = await _itemFetcherService.GetNeeds(10);
+            User currentUser = _itemFetcherService.GetUser();
+            var needs =  _itemFetcherService.GetNeeds(10);
 
             NeedsViewModel model = new NeedsViewModel()
             {
@@ -42,9 +42,9 @@ namespace HelpBudgetMe.Services
 
             return model;
         }
-        public async Task<TransferViewModel> CreateNeededModelForTransferAsync()
+        public TransferViewModel CreateNeededModelForTransfer()
         {
-            User currentUser = await _itemFetcherService.GetUserAsync();
+            User currentUser = _itemFetcherService.GetUser();
 
             var model = new TransferViewModel()
             {
@@ -64,10 +64,10 @@ namespace HelpBudgetMe.Services
             return need;
         }
 
-        public async Task<PaychecksViewModel> CreateModelForPaycheckIndexAsync()
+        public PaychecksViewModel CreateModelForPaycheckIndex()
         {
-            User currentUser = await _itemFetcherService.GetUserAsync();
-            var paychecks = await _itemFetcherService.GetPaychecks(10);
+            User currentUser = _itemFetcherService.GetUser();
+            var paychecks = _itemFetcherService.GetPaychecks(10);
 
             PaychecksViewModel model = new PaychecksViewModel()
             {
@@ -99,6 +99,43 @@ namespace HelpBudgetMe.Services
         {
             Paycheck paycheck = await _itemFetcherService.GetSpecificPaycheckAsync(Id);
             return paycheck;
+        }
+
+        public WantsViewModel CreateNeededModelForWantsIndex()
+        {
+            User currentUser = _itemFetcherService.GetUser();
+
+            var wants = _itemFetcherService.GetWants(10);
+
+            WantsViewModel model = new WantsViewModel()
+            {
+                Wants = wants,
+                BudgetedForWants = currentUser.BudgetedForWants
+            };
+
+            return model;
+        }
+
+        public async Task<EditViewModel> CreateNeededModelForEditWants(int Id)
+        {
+            Want want = await _itemFetcherService.GetSpecificWantAsync(Id);
+
+            var model = new EditViewModel()
+            {
+                Id = want.Id,
+                Name = want.Name,
+                Amount = want.Amount,
+                PreviousAmount = want.Amount,
+                DateCreated = want.DateCreated
+            };
+
+            return model;
+        }
+
+        public async Task<Want> CreateNeededModelForDeleteWant(int Id)
+        {
+            Want want = await _itemFetcherService.GetSpecificWantAsync(Id);
+            return want;
         }
     }
 }

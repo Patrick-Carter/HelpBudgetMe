@@ -9,12 +9,15 @@ namespace HelpBudgetMe.Services
 {
     public interface IVMGeneratorService
     {
-        public Task<NeedsViewModel> CreateNeededModelForNeedIndexAsync();
+        public NeedsViewModel CreateNeededModelForNeedIndex();
         public Task<EditViewModel> CreateNeededModelForEditNeedAsync(int Id);
         public Task<Need> CreateNeededModelForDeleteNeedAsync(int Id);
-        public Task<TransferViewModel> CreateNeededModelForTransferAsync();
-        public Task<PaychecksViewModel> CreateModelForPaycheckIndexAsync();
+        public TransferViewModel CreateNeededModelForTransfer();
+        public PaychecksViewModel CreateModelForPaycheckIndex();
         public Task<EditViewModel> CreateNeededModelForEditPaycheckAsync(int Id);
         public Task<Paycheck> CreateNeededModelForDeletePaycheckAsync(int Id);
+        public WantsViewModel CreateNeededModelForWantsIndex();
+        public Task<EditViewModel> CreateNeededModelForEditWants(int Id);
+        public Task<Want> CreateNeededModelForDeleteWant(int Id);
     }
 }
