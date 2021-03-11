@@ -63,5 +63,42 @@ namespace HelpBudgetMe.Services
             Need need = await _itemFetcherService.GetSpecificNeedAsync(Id);
             return need;
         }
+
+        public async Task<PaychecksViewModel> CreateModelForPaycheckIndexAsync()
+        {
+            User currentUser = await _itemFetcherService.GetUserAsync();
+            var paychecks = await _itemFetcherService.GetPaychecks(10);
+
+            PaychecksViewModel model = new PaychecksViewModel()
+            {
+                Paychecks = paychecks,
+                AllTimeEarned = currentUser.AllTimeEarned
+
+            };
+
+            return model;
+        }
+
+        public async Task<EditViewModel> CreateNeededModelForEditPaycheckAsync(int Id)
+        {
+            Paycheck paycheck = await _itemFetcherService.GetSpecificPaycheckAsync(Id);
+
+            var model = new EditViewModel()
+            {
+                Id = paycheck.Id,
+                Name = paycheck.Name,
+                Amount = paycheck.Amount,
+                PreviousAmount = paycheck.Amount,
+                DateCreated = paycheck.DateCreated
+            };
+
+            return model;
+        }
+
+        public async Task<Paycheck> CreateNeededModelForDeletePaycheckAsync(int Id)
+        {
+            Paycheck paycheck = await _itemFetcherService.GetSpecificPaycheckAsync(Id);
+            return paycheck;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using HelpBudgetMe.Data;
 using HelpBudgetMe.Models;
 using HelpBudgetMe.Models.ViewModels;
+using HelpBudgetMe.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -22,34 +23,29 @@ namespace HelpBudgetMe.Controllers
     
     public class PaycheckController : Controller
     {
-        private readonly ApplicationDBContext _db;
-        private readonly UserManager<User> _userManager;
+        private readonly IVMGeneratorService _vmGenerator;
+        private readonly IItemGeneratorService _itemGenerator;
+        private readonly IUserEditorService _userEditor;
+        private readonly IItemFetcherService _itemFetcherService;
 
-        public PaycheckController(ApplicationDBContext db, UserManager<User> userManager)
+        public PaycheckController(IVMGeneratorService vmGenerator,
+            IItemGeneratorService itemGenerator,
+            IUserEditorService userEditor,
+            IItemFetcherService itemFetcherService)
         {
-            _db = db;
-            _userManager = userManager;
+            _vmGenerator = vmGenerator;
+            _itemGenerator = itemGenerator;
+            _userEditor = userEditor;
+            _itemFetcherService = itemFetcherService;
         }
         [HttpGet]
-
+        // Index = GetAllPaychecks
         public async Task<IActionResult> Index()
         {
             try
             {
-                string Id = _userManager.GetUserId(User);
-                User currentUser = await _db.Users.Where(a => a.Id == Id).FirstOrDefaultAsync();
-
-                var paychecks = _db.Paychecks.Where(a => a.User == currentUser).OrderByDescending(b => b.DateCreated).Take(10).ToList();
-
-                PaychecksViewModel model = new PaychecksViewModel()
-                {
-                    Paychecks = paychecks,
-                    AllTimeEarned = currentUser.AllTimeEarned
-                    
-                };
-
+                PaychecksViewModel model = await _vmGenerator.CreateModelForPaycheckIndexAsync();
                 return View(model);
-
             }
             catch
             {
@@ -63,92 +59,37 @@ namespace HelpBudgetMe.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult EditPaycheck(int Id)
+        public async Task<IActionResult> EditPaycheck(int Id)
         {
-            Paycheck paycheck = _db.Paychecks.Where(a => a.Id == Id).FirstOrDefault();
-
-            var model = new EditViewModel()
-            {
-                Id = paycheck.Id,
-                Name = paycheck.Name,
-                Amount = paycheck.Amount,
-                PreviousAmount = paycheck.Amount,
-                DateCreated = paycheck.DateCreated
-            };
+            EditViewModel model = await _vmGenerator.CreateNeededModelForEditPaycheckAsync(Id);
 
             return View(model);
         }
 
-        public IActionResult DeletePaycheck(int Id)
+        public async Task<IActionResult> DeletePaycheck(int Id)
         {
 
-            Paycheck paycheck = _db.Paychecks.Where(a => a.Id == Id).FirstOrDefault();
+            Paycheck paycheck = await _vmGenerator.CreateNeededModelForDeletePaycheckAsync(Id);
 
             return View(paycheck);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> DeletePaycheck(Paycheck model)
-        {
-            if (ModelState.IsValid)
-            {
-                try { 
-                    string UserId = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == UserId).FirstOrDefault();
-                    Paycheck paycheck = _db.Paychecks.Where(a => (a.Id == model.Id) && (a.User == currentUser)).FirstOrDefault();
-
-                    currentUser.CurrentMoney -= paycheck.Amount;
-                    currentUser.BudgetedForNeeds -= (paycheck.Amount * .5m);
-                    currentUser.BudgetedForWants -= (paycheck.Amount * .3m);
-                    currentUser.BudgetedForSavings -= (paycheck.Amount * .2m);
-                    currentUser.AllTimeEarned -= paycheck.Amount;
-                    await _userManager.UpdateAsync(currentUser);
-                    _db.Paychecks.Remove(paycheck);
-                    _db.SaveChanges();
-
-
-                    return RedirectToAction("Index", "Dashboard");
-                }
-                catch
-                {
-                    return BadRequest();
-                }
-            }
-            return BadRequest();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPaycheck(Paycheck model)
+        public async Task<IActionResult> AddPaycheck(AddViewModel model)
         {
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
+                    await _itemGenerator.CreatePaycheckAndPushToDbAsync(model);
 
-
-                    var paycheck = new Paycheck
-                    {
-                        Name = model.Name,
-                        Amount = model.Amount,
-                        User = currentUser,
-                        DateCreated = DateTime.Now
-                    };
-
-
-                    currentUser.CurrentMoney += model.Amount;
-                    currentUser.AllTimeEarned += model.Amount;
-                    currentUser.BudgetedForNeeds += (model.Amount * .5m);
-                    currentUser.BudgetedForWants += (model.Amount * .3m);
-                    currentUser.BudgetedForSavings += (model.Amount * .2m);
-                    await _db.Paychecks.AddAsync(paycheck);
-                    await _userManager.UpdateAsync(currentUser);
-                    await _db.SaveChangesAsync();
+                    await _userEditor.AddCurrentMoney(model.Amount);
+                    await _userEditor.AddToAllTimeEarned(model.Amount);
+                    await _userEditor.AddBudgetedForNeeds(model.Amount * .5m);
+                    await _userEditor.AddBudgetedForWants(model.Amount * .3m);
+                    await _userEditor.AddBudgetedForSavings(model.Amount * .2m);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -168,34 +109,23 @@ namespace HelpBudgetMe.Controllers
         public async Task<IActionResult> EditPaycheck(EditViewModel model)
         {
             if (ModelState.IsValid) { 
-                try { 
-                    string Id = _userManager.GetUserId(User);
-                    User currentUser = _db.Users.Where(a => a.Id == Id).FirstOrDefault();
-
-                    var paycheck = new Paycheck()
-                    {
-                        Id = model.Id,
-                        Name = model.Name,
-                        Amount = model.Amount,
-                        DateCreated = model.DateCreated,
-                        User = currentUser
-                    };
+                try {
+                    await _itemGenerator.EditPaycheckAndPushToDbAsync(model);
 
                     decimal amountChanged = model.PreviousAmount - model.Amount;
 
-                    currentUser.CurrentMoney -= amountChanged;
-                    currentUser.BudgetedForNeeds -= (amountChanged * .5m);
-                    currentUser.BudgetedForWants -= (amountChanged * .3m);
-                    currentUser.BudgetedForSavings -= (amountChanged * .2m);
-                    currentUser.AllTimeEarned -= amountChanged;
-
-                    await _userManager.UpdateAsync(currentUser);
-                    _db.Paychecks.Update(paycheck);
-                    _db.SaveChanges();
+                    await _userEditor.SubtractCurrentMoney(amountChanged);
+                    await _userEditor.SubtractBudgetedForNeeds(amountChanged * .5m);
+                    await _userEditor.SubtractBudgetedForWants(amountChanged * .3m);
+                    await _userEditor.SubtractBudgetedForSavings(amountChanged * .2m);
+                    await _userEditor.SubtractFromAllTimeEarned(amountChanged);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
-                catch { return BadRequest(); }
+                catch
+                {
+                    return BadRequest();
+                }
             }
             else
             {
@@ -204,29 +134,56 @@ namespace HelpBudgetMe.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> DeletePaycheck(Paycheck model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _itemGenerator.DeletePaycheckAndPushToDbAstnc(model);
+
+                    await _userEditor.SubtractCurrentMoney(model.Amount);
+                    await _userEditor.SubtractBudgetedForNeeds(model.Amount * .5m);
+                    await _userEditor.SubtractBudgetedForWants(model.Amount * .3m);
+                    await _userEditor.SubtractBudgetedForSavings(model.Amount * .2m);
+                    await _userEditor.SubtractFromAllTimeEarned(model.Amount);
+
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
         [Route("api/GetMorePaycheck")]
 
         public async Task<JsonResult> GetMorePaycheck()
         {
-            
-            // get req body and convert text to int
-            string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            int skip = 10;
-
             try
             {
+                // get req body and convert text to int
+                string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                int skip = 10;
+
                 skip = int.Parse(req);
+
+                List<Paycheck> paychecks = await _itemFetcherService.GetMorePaychecksAsync(skip);
+
+                return Json(paychecks);
             }
             catch
             {
                 return Json("Something went wrong");
             }
             
-            string Id = _userManager.GetUserId(User);
-
-            var paychecks = _db.Paychecks.Where(a => a.User.Id == Id).OrderByDescending(b => b.DateCreated).Skip(skip).Take(10).ToList();
-
-            return Json(paychecks);
+          
+            
         }
 
     }

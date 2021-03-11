@@ -199,12 +199,12 @@ namespace HelpBudgetMe.Controllers
         [Route("api/GetMoreNeed")]
         public async Task<JsonResult> GetMoreNeeds()
         {
-            // get req body and convert text to int
-            string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            int skip = 10;
-
             try
             {
+                // get req body and convert text to int
+                string req = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                int skip = 10;
+
                 skip = int.Parse(req);
                 List<Need> needs = await _itemFetcherService.GetMoreNeedsAsync(skip);
 

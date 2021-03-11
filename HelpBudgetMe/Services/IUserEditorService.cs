@@ -15,5 +15,10 @@ namespace HelpBudgetMe.Services
         public Task SubtractFromAllTimeSpent(decimal amount);
         public Task AddBudgetedForWants(decimal amount);
         public Task AddBudgetedForSavings(decimal amount);
+        public Task AddToAllTimeEarned(decimal amount);
+        public Task SubtractBudgetedForWants(decimal amount);
+        public Task SubtractBudgetedForSavings(decimal amount);
+
+        public Task SubtractFromAllTimeEarned(decimal amount);
     }
 }

@@ -58,6 +58,15 @@ namespace HelpBudgetMe.Services
             await _userManager.UpdateAsync(currentUser);
         }
 
+        public async Task AddToAllTimeEarned(decimal amount)
+        {
+            User currentUser = await _itemFetcherService.GetUserAsync();
+
+            currentUser.AllTimeEarned += amount;
+
+            await _userManager.UpdateAsync(currentUser);
+        }
+
         public async Task AddToAllTimeSpent(decimal amount)
         {
             User currentUser = await _itemFetcherService.GetUserAsync();
@@ -76,11 +85,38 @@ namespace HelpBudgetMe.Services
             await _userManager.UpdateAsync(currentUser);
         }
 
+        public async Task SubtractBudgetedForSavings(decimal amount)
+        {
+            User currentUser = await _itemFetcherService.GetUserAsync();
+
+            currentUser.BudgetedForSavings -= amount;
+
+            await _userManager.UpdateAsync(currentUser);
+        }
+
+        public async Task SubtractBudgetedForWants(decimal amount)
+        {
+            User currentUser = await _itemFetcherService.GetUserAsync();
+
+            currentUser.BudgetedForWants -= amount;
+
+            await _userManager.UpdateAsync(currentUser);
+        }
+
         public async Task SubtractCurrentMoney(decimal amount)
         {
             User currentUser = await _itemFetcherService.GetUserAsync();
 
             currentUser.CurrentMoney -= amount;
+
+            await _userManager.UpdateAsync(currentUser);
+        }
+
+        public async Task SubtractFromAllTimeEarned(decimal amount)
+        {
+            User currentUser = await _itemFetcherService.GetUserAsync();
+
+            currentUser.AllTimeEarned -= amount;
 
             await _userManager.UpdateAsync(currentUser);
         }

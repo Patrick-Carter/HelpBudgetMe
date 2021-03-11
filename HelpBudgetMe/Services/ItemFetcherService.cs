@@ -28,7 +28,7 @@ namespace HelpBudgetMe.Services
         public async Task<List<Need>> GetNeeds(int amountToGet)
         {
             User user = await GetUser();
-            List<Need> needs = _db.Needs.Where(a => a.User.Id == user.Id).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
+            List<Need> needs = _db.Needs.Where(a => a.User == user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
 
             return needs;
         }
@@ -54,12 +54,33 @@ namespace HelpBudgetMe.Services
             return needs;
         }
 
+        public async Task<List<Paycheck>> GetPaychecks(int amountToGet)
+        {
+            User user = await GetUser();
+            List<Paycheck> paychecks = _db.Paychecks.Where(a => a.User == user).OrderByDescending(b => b.DateCreated).Take(amountToGet).ToList();
+
+            return paychecks;
+        }
+
+        public async Task<Paycheck> GetSpecificPaycheckAsync(int Id)
+        {
+            User user = await GetUser();
+            Paycheck paycheck = await _db.Paychecks.Where(a => (a.Id == Id) && (a.User == user)).FirstOrDefaultAsync();
+            return paycheck;
+        }
+
+        public async Task<List<Paycheck>> GetMorePaychecksAsync(int start)
+        {
+            User user = await GetUser();
+            var paychecks = _db.Paychecks.Where(a => a.User == user).OrderByDescending(b => b.DateCreated).Skip(start).Take(10).ToList();
+
+            return paychecks;
+        }
+
         private async Task<User> GetUser()
         {
             User user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
             return user;
         }
-
-        
     }
 }

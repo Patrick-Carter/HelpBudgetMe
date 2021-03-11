@@ -14,5 +14,9 @@ namespace HelpBudgetMe.Services
         public Task EditNeedAndPushToDbAsync(EditViewModel model);
 
         public Task DeleteNeedAndPushToDbAsync(Need model);
+
+        public Task CreatePaycheckAndPushToDbAsync(AddViewModel model);
+        public Task EditPaycheckAndPushToDbAsync(EditViewModel model);
+        public Task DeletePaycheckAndPushToDbAstnc(Paycheck model);
     }
 }

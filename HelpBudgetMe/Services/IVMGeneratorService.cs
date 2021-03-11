@@ -11,7 +11,10 @@ namespace HelpBudgetMe.Services
     {
         public Task<NeedsViewModel> CreateNeededModelForNeedIndexAsync();
         public Task<EditViewModel> CreateNeededModelForEditNeedAsync(int Id);
-        public Task<TransferViewModel> CreateNeededModelForTransferAsync();
         public Task<Need> CreateNeededModelForDeleteNeedAsync(int Id);
+        public Task<TransferViewModel> CreateNeededModelForTransferAsync();
+        public Task<PaychecksViewModel> CreateModelForPaycheckIndexAsync();
+        public Task<EditViewModel> CreateNeededModelForEditPaycheckAsync(int Id);
+        public Task<Paycheck> CreateNeededModelForDeletePaycheckAsync(int Id);
     }
 }
