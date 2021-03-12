@@ -14,21 +14,21 @@ namespace HelpBudgetMe.Services
     {
         private readonly ApplicationDBContext _db;
         private readonly IItemFetcherService _itemFetcherService;
+        private readonly User _user;
         public ItemGeneratorService(ApplicationDBContext db,
             IItemFetcherService itemFetcherService)
         {
             _db = db;
             _itemFetcherService = itemFetcherService;
+            _user = itemFetcherService.GetUser();
         }
         public async Task CreateNeedAndPushToDbAsync(AddViewModel model)
         {
-            User currentUser = _itemFetcherService.GetUser();
-
             Need need = new Need()
             {
                 Name = model.Name,
                 Amount = model.Amount,
-                User = currentUser,
+                User = _user,
                 DateCreated = DateTime.Now
             };
 
@@ -38,13 +38,11 @@ namespace HelpBudgetMe.Services
 
         public async Task CreatePaycheckAndPushToDbAsync(AddViewModel model)
         {
-            User currentUser = _itemFetcherService.GetUser();
-
             Paycheck paycheck = new Paycheck
             {
                 Name = model.Name,
                 Amount = model.Amount,
-                User = currentUser,
+                User = _user,
                 DateCreated = DateTime.Now
             };
 
@@ -54,13 +52,11 @@ namespace HelpBudgetMe.Services
 
         public async Task CreateSavingAndPushToDbAsync(AddViewModel model)
         {
-            User currentUser = _itemFetcherService.GetUser();
-
             Saving saving = new Saving()
             {
                 Name = model.Name,
                 Amount = model.Amount,
-                User = currentUser,
+                User = _user,
                 DateCreated = DateTime.Now
             };
 
@@ -70,13 +66,11 @@ namespace HelpBudgetMe.Services
 
         public async Task CreateWantAndPushToDbAsync(AddViewModel model)
         {
-            User currentUser = _itemFetcherService.GetUser();
-
             Want want = new Want()
             {
                 Name = model.Name,
                 Amount = model.Amount,
-                User = currentUser,
+                User = _user,
                 DateCreated = DateTime.Now
             };
 

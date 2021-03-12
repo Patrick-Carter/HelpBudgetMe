@@ -10,9 +10,11 @@ namespace HelpBudgetMe.Services
     public class VMGeneratorService : IVMGeneratorService
     {
         private readonly IItemFetcherService _itemFetcherService;
+        private readonly User _user;
         public VMGeneratorService(IItemFetcherService itemFetcherService)
         {
             _itemFetcherService = itemFetcherService;
+            _user = itemFetcherService.GetUser();
         }
         public async Task<EditViewModel> CreateNeededModelForEditNeedAsync(int Id)
         {
@@ -31,26 +33,23 @@ namespace HelpBudgetMe.Services
         }
         public NeedsViewModel CreateNeededModelForNeedIndex()
         {
-            User currentUser = _itemFetcherService.GetUser();
             var needs =  _itemFetcherService.GetNeeds(10);
 
             NeedsViewModel model = new NeedsViewModel()
             {
                 Needs = needs,
-                BudgetedForNeeds = currentUser.BudgetedForNeeds
+                BudgetedForNeeds = _user.BudgetedForNeeds
             };
 
             return model;
         }
         public TransferViewModel CreateNeededModelForTransfer()
         {
-            User currentUser = _itemFetcherService.GetUser();
-
             var model = new TransferViewModel()
             {
-                BudgetedForNeeds = currentUser.BudgetedForNeeds,
-                BudgetedForWants = currentUser.BudgetedForWants,
-                BudgetedForSavings = currentUser.BudgetedForSavings,
+                BudgetedForNeeds = _user.BudgetedForNeeds,
+                BudgetedForWants = _user.BudgetedForWants,
+                BudgetedForSavings = _user.BudgetedForSavings,
                 TransferToNeeds = 0m,
                 TransferToWants = 0m,
                 TransferToSavings = 0m
@@ -66,13 +65,12 @@ namespace HelpBudgetMe.Services
 
         public PaychecksViewModel CreateModelForPaycheckIndex()
         {
-            User currentUser = _itemFetcherService.GetUser();
             var paychecks = _itemFetcherService.GetPaychecks(10);
 
             PaychecksViewModel model = new PaychecksViewModel()
             {
                 Paychecks = paychecks,
-                AllTimeEarned = currentUser.AllTimeEarned
+                AllTimeEarned = _user.AllTimeEarned
 
             };
 
@@ -103,14 +101,12 @@ namespace HelpBudgetMe.Services
 
         public WantsViewModel CreateNeededModelForWantsIndex()
         {
-            User currentUser = _itemFetcherService.GetUser();
-
             var wants = _itemFetcherService.GetWants(10);
 
             WantsViewModel model = new WantsViewModel()
             {
                 Wants = wants,
-                BudgetedForWants = currentUser.BudgetedForWants
+                BudgetedForWants = _user.BudgetedForWants
             };
 
             return model;
@@ -140,14 +136,12 @@ namespace HelpBudgetMe.Services
 
         public SavingsViewModel CreateNeededModelForSavingIndex()
         {
-            User currentUser = _itemFetcherService.GetUser();
-
             var savings = _itemFetcherService.GetSavings(10);
 
             SavingsViewModel model = new SavingsViewModel()
             {
                 Savings = savings,
-                BudgetedForSavings = currentUser.BudgetedForSavings
+                BudgetedForSavings = _user.BudgetedForSavings
             };
 
             return model;
