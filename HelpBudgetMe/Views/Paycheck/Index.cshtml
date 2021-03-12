@@ -6,46 +6,48 @@
 
 
 <main>
-    <h2 class="dashboard_headline pagestart">Paychecks</h2>
-    <h5 class="expenseType_amount">All-Time Earned: <strong>$@Model.AllTimeEarned</strong></h5>
-    <div class="expenseType_actions">
-        <a class="btn btn-action" asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
-    </div>
+    <section>
+        <h2 class="dashboard_headline pagestart">Paychecks</h2>
+        <h5 class="expenseType_amount">All-Time Earned: <strong>$@Model.AllTimeEarned</strong></h5>
+        <div class="expenseType_actions">
+            <a class="btn btn-action" asp-controller="Paycheck" asp-action="AddPaycheck">Add</a>
+        </div>
 
-    @if (Model.Paychecks.Count > 0)
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="tbody">
-                @foreach (var item in Model.Paychecks)
-                {
+        @if (Model.Paychecks.Count > 0)
+        {
+            <table>
+                <thead>
                     <tr>
-                        <td data-heading="Name">@item.Name</td>
-                        <td data-heading="Amount">$@item.Amount</td>
-                        <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
-                        <td data-heading="Actions">
-                            <a class="table_actions" asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
-                            <a class="danger table_actions" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
-                        </td>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <p class="loading hidden pagebottom" id="loading">Loading...</p>
-        <p class="clickable_link pagebottom" id="loadmore">Load More</p>
-        <p class="clickable_link pagebottom hidden" id="allLoaded">All paychecks loaded</p>
-    }
-    else
-    {
-        <h2 class="expenseType_none">You haven't added any paychecks yet.</h2>
-    }
+                </thead>
+                <tbody id="tbody">
+                    @foreach (var item in Model.Paychecks)
+                    {
+                        <tr>
+                            <td data-heading="Name">@item.Name</td>
+                            <td data-heading="Amount">$@item.Amount</td>
+                            <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
+                            <td data-heading="Actions">
+                                <a class="table_actions" asp-controller="Paycheck" asp-action="EditPaycheck" asp-route-Id="@item.Id">Edit</a>
+                                <a class="danger table_actions" asp-controller="Paycheck" asp-action="DeletePaycheck" asp-route-Id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p class="loading hidden pagebottom" id="loading">Loading...</p>
+            <p class="clickable_link pagebottom" id="loadmore">Load More</p>
+            <p class="clickable_link pagebottom hidden" id="allLoaded">All paychecks loaded</p>
+        }
+        else
+        {
+            <h2 class="expenseType_none">You haven't added any paychecks yet.</h2>
+        }
+    </section>
 </main>
 <script>
     let totalTabelItems = 10;

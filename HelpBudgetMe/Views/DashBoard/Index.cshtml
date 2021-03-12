@@ -67,6 +67,7 @@
     </section>
     <section>
         <h2 class="dashboard_headline">Needs</h2>
+        <h5 class="expenseType_amount">Budgeted: <strong>$@Model.NeedsBudget</strong></h5>
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Need" asp-action="Index">View All</a>
             <a class="btn btn-action" asp-controller="Need" asp-action="AddNeed">Add</a>
@@ -105,10 +106,11 @@
             <h2 class="expenseType_none">You haven't added any needs yet.</h2>
         }
 
-        <h5 class="expenseType_amount">Budgeted for Needs: <strong>$@Model.NeedsBudget</strong></h5>
+
     </section>
     <section>
         <h2 class="dashboard_headline">Wants</h2>
+        <h5 class="expenseType_amount">Budgeted: <strong>$@Model.WantsBudget</strong></h5>
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Want" asp-action="Index">View All</a>
             <a class="btn btn-action" asp-controller="Want" asp-action="AddWant">Add</a>
@@ -147,10 +149,11 @@
             <h2 class="expenseType_none">You haven't added any wants yet.</h2>
         }
 
-        <h5 class="expenseType_amount">Budgeted for Wants: <strong>$@Model.WantsBudget</strong></h5>
+
     </section>
     <section>
         <h2 class="dashboard_headline">Savings</h2>
+        <h5 class="expenseType_amount">Total Savings: <strong>$@Model.SavingsBudget</strong></h5>
         <div class="expenseType_actions">
             <a class="btn btn-action" asp-controller="Saving" asp-action="Index">View All</a>
             <a class="btn btn-action" asp-controller="Saving" asp-action="AddSaving">Spend</a>
@@ -189,6 +192,6 @@
             <h2 class="expenseType_none">You haven't spent any savings yet.</h2>
         }
 
-        <h5 class="expenseType_amount">Total Savings: <strong>$@Model.SavingsBudget</strong></h5>
+
     </section>
 </main>

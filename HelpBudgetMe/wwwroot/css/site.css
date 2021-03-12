@@ -30,6 +30,47 @@ input:focus, input:hover {
     background-color: #e8eee6;
 }
 
+section {
+    padding: .5rem;
+    padding-top: 0;
+}
+
+@media only screen and (min-width: 760px) {
+    body {
+        font-size: 20px;
+    }
+    section {
+        padding: 3rem;
+        padding-top: 0;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    body {
+        font-size: 22px;
+    }
+
+    section {
+        padding: 3rem;
+        padding-top: 0;
+    }
+}
+
+@media only screen and (min-width: 1440px) {
+    section {
+        padding: 5rem 6rem;
+        padding-top: 0;
+    }
+}
+
+@media only screen and (min-width: 1900px) {
+    section {
+        padding: 5rem 10rem;
+        padding-top: 0;
+    }
+}
+
+
 
 
 /*NAV STYLES-------------------------------------------------------------------------------------------------------------------------------*/
@@ -37,6 +78,7 @@ input:focus, input:hover {
 h3 a {
     font-family: 'Pacifico', cursive;
     padding: 1rem;
+    padding-left: 0;
     font-size: 1.1em;
     padding-right: 0;
     color: #0A0A0A;
@@ -55,11 +97,11 @@ nav {
     width: 100%;
     top: 0;
     z-index: 999;
+    padding: .5rem;
 }
 
 .nav_itemContainer {
-    padding: 1rem;
-    padding-left: 0;
+    padding: 1em 0;
 }
 
 .nav_item {
@@ -68,24 +110,52 @@ nav {
     color: #0A0A0A;
 }
 
+@media only screen and (min-width: 760px) {
+    nav {
+        padding: .5rem 3rem;
+    }
+    .nav_item {
+        margin-left: 2rem;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    nav {
+        padding: .5rem 3rem;
+    }
+    
+}
+
+@media only screen and (min-width: 1440px) {
+    nav {
+        padding: .5rem 6rem;
+    }
+}
+
+@media only screen and (min-width: 1900px) {
+    nav {
+        padding: .5rem 10rem;
+    }
+}
+
 /*FRONTPAGE STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 
 
 /*SPLASH SECTION*/
 
+
+
 .headline {
     position: relative;
     height: 70vh;
-    margin-top: 1rem;
-    margin: 1rem;
 }
 
 .headline_watermark {
     position: absolute;
     font-weight: 200;
     font-size: 20vh;
-    top: 0;
-    left: -5%;
+    top: 5%;
+    left: -10%;
     opacity: .13;
     writing-mode: vertical-lr;
     text-orientation: upright;
@@ -108,6 +178,28 @@ nav {
     font-weight: 600;
 }
 
+@media only screen and (min-width: 1280px) {
+    .headline_watermark {
+        writing-mode: unset;
+        text-orientation: unset;
+        font-size: 39vw;
+        top: -15%;
+        left: -8%;
+    }
+
+    .headline_hook {
+        top: 19%;
+        text-align: left;
+    }
+}
+
+@media only screen and (min-width: 1900px) {
+    .headline_watermark {
+        top: -17%;
+        font-size: 37vw;
+    }
+}
+
 
 /*BUDGET SECTION*/
 
@@ -120,9 +212,9 @@ nav {
 }
 
 .circle {
-    width: 15rem;
-    height: 15rem;
-    border: solid .25rem #0A0A0A;
+    width: 15em;
+    height: 15em;
+    border: solid .25em #0A0A0A;
     background-color: transparent;
     border-radius: 50%;
     margin: 0 auto;
@@ -144,6 +236,8 @@ nav {
    margin-bottom: 7rem;
 }
 
+
+
 /*Liz Section*/
 
 .frontpage_section3 {
@@ -155,7 +249,7 @@ nav {
 }
 
 .section3_pic {
-    width: 15.25rem;
+    width: 15.25em;
     border-radius: 50%;
     margin-bottom: 3.5rem;
 }
@@ -163,9 +257,18 @@ nav {
 .section3_text {
     font-weight: 400;
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.3rem;
     margin-bottom: 3.5rem;
+    width: 100%;
 }
+
+@media only screen and (min-width: 1024px) {
+    .section3_text {
+        width: 50ch;
+    }
+}
+
+
 
 /*Sign-in/up-------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -215,31 +318,29 @@ input {
     color: #0A0A0A;
 }
 
-.overview_itemContainer {
-    margin-bottom: 2rem;
-}
-
 .overview_itemTitle {
     font-size: 1.5em;
     font-weight: 700;
     color: #0A0A0A;
+    margin-bottom: .5rem;
 }
 
 .overview_itemAmount {
     font-size: 1.3em;
     font-weight: 500;
+    margin-bottom: 1rem;
 }
 
 .expenseType_actions {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
 }
 
 .expenseType_amount {
     font-size: 1.5em;
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
 }
 
 .expenseType_none {
@@ -261,7 +362,7 @@ tbody tr:nth-child(2n-1) {
 }
 
 th, td {
-    padding: .5em;
+    padding: .4em;
     text-align: left;
     width: 8ch;
     font-weight: 500;
@@ -281,13 +382,18 @@ th {
     padding: 1em .5em;
     text-transform: uppercase;
 }
+@media only screen and (min-width: 1024px) {
+    table {
+        font-size: 1rem;
+    }
+}
 
 
 /*UTILITY STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 .btn {
     padding: .5rem;
     border-radius: 13px;
-    min-width: 4.5rem;
+    min-width: 5rem;
     text-align: center;
 }
 
@@ -329,18 +435,17 @@ strong {
 }
 
 .clickable_link {
-    color: #CF686F;
     text-decoration: underline solid currentcolor;
     text-align: center;
     cursor: pointer;
 }
 
 .pagebottom {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.5em;
 }
 
 .pagestart {
-    margin-top: 4.3rem;
+    margin-top: 3em;
 }
 
 @keyframes loading {
@@ -372,5 +477,11 @@ strong {
     display: block;
     text-align: center;
     margin-bottom: 1em;
+}
+
+@media only screen and (min-width: 1024px) {
+    .btn {
+        min-width: 8rem;
+    }
 }
 

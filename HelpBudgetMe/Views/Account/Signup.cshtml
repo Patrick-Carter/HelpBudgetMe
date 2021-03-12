@@ -8,7 +8,7 @@
 <section>
     <form class="flex_column-center" id="signup" method="post" asp-controller="Account" asp-action="Signup">
         <h2 class="signing_title pagestart">Sign Up!</h2>
-        <div asp-validation-summary="All"></div>
+        <div class="validationError danger" asp-validation-summary="All"></div>
         <div>
             <label asp-for="Name"></label>
             <input asp-for="Name" />

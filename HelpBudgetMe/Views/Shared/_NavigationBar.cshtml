@@ -9,7 +9,7 @@
         <form method="post" id="logoutForm" asp-controller="Account" asp-action="Logout">
             <ul class="nav_itemContainer">
                 <li class="nav_item">
-                    <a class="btn btn-outline" href="javascript:document.getElementById('logoutForm').submit()">Sign-out</a>
+                    <a class="btn btn-action" href="javascript:document.getElementById('logoutForm').submit()">Sign-out</a>
                 </li>
             </ul>
         </form>
@@ -23,7 +23,7 @@ else
         </h3>
         <ul class="nav_itemContainer">
             <li class="nav_item">
-                <a class="btn btn-outline" asp-controller="Account" asp-action="Signin">Sign-in</a>
+                <a class="btn clickable_link" asp-controller="Account" asp-action="Signin">Sign-in</a>
             </li>
             <li class="nav_item">
                 <a class="btn btn-action" asp-controller="Account" asp-action="Signup">Sign-up</a>

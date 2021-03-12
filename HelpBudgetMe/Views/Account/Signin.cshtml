@@ -9,7 +9,7 @@
 <main>
     <form class="flex_column-center" id="signin" method="post" asp-controller="Account" asp-action="Signin">
         <h1 class="signing_title pagestart">Sign-in!</h1>
-        <div asp-validation-summary="All"></div>
+        <div class="validationError danger" asp-validation-summary="All"></div>
         <div>
             <label asp-for="Email"></label>
             <input asp-for="Email" />
