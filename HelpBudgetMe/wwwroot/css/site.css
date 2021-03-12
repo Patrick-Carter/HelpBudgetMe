@@ -169,13 +169,6 @@ nav {
 
 /*Sign-in/up-------------------------------------------------------------------------------------------------------------------------------*/
 
-.signing {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
 .signing_title {
     color: #0A0A0A;
     font-size: 2.5em;
@@ -190,13 +183,13 @@ label {
     font-size: 1.2em;
 }
 
-.signing input {
+input {
     font-size: 1.2em;
     padding: .5ch;
     margin: 1rem 0;
 }
 
-.signing button, .signing a {
+.flex_column-center button, .flex_column-center a {
     margin-top: 1.5rem;
     margin-right: 1rem;
     font-weight: 500;
@@ -220,13 +213,6 @@ label {
     margin-bottom: 3rem;
     text-transform: uppercase;
     color: #0A0A0A;
-}
-
-.overview, .overview_itemContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .overview_itemContainer {
@@ -333,6 +319,13 @@ strong {
 
 .danger {
     color: #DA2F3A;
+}
+
+.flex_column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .clickable_link {
