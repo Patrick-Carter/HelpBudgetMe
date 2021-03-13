@@ -4,21 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - HelpBudgetMe</title>
-    
-    <link rel="stylesheet" href="~/css/site.css" />
+    <environment include="Development"><link rel="stylesheet" href="~/css/site.css" /></environment>
+    <environment include="Production"><link rel="stylesheet" href="~/css/site.min.css" /></environment>
 </head>
 <body>
-    
-        <partial name="_NavigationBar" />
-    
-    <div >
-        <main role="main" >
+    <partial name="_NavigationBar" />
+    <div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
     <footer>
-        
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
