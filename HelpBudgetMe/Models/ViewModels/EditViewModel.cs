@@ -22,7 +22,6 @@ namespace HelpBudgetMe.Models.ViewModels
         [Required]
         [Column(TypeName = "decimal(12,2)")]
         [DataType(DataType.Currency)]
-        
         public decimal PreviousAmount { get; set; }
 
         [Required]

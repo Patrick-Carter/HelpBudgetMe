@@ -19,7 +19,7 @@
             <span class="validationError danger" asp-validation-for="Amount"></span>
         </div>
         <input value="@Model.Id" asp-for="Id" hidden />
-        <input value="@Model.DateCreated" asp-for="DateCreated" hidden />
+        <input type="datetime" value="@Model.DateCreated" asp-for="DateCreated" hidden />
         <input value="@Model.PreviousAmount" asp-for="PreviousAmount" hidden />
         <button class="btn btn-action" type="submit">Update</button>
     </form>
