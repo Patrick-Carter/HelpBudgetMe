@@ -34,7 +34,7 @@
                             <td data-heading="Date">@item.DateCreated.ToShortDateString()</td>
                             <td data-heading="Actions">
                                 <a class="table_actions" asp-controller="Want" asp-action="EditWant" asp-route-Id="@item.Id">Edit</a>
-                                <a class="danger table_actions" asp-controller="Want" asp-action="DeleteWants" asp-route-Id="@item.Id">Delete</a>
+                                <a class="danger table_actions" asp-controller="Want" asp-action="DeleteWant" asp-route-Id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }

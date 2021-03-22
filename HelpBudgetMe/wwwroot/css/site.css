@@ -1,11 +1,11 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800;900&family=Pacifico&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800;900&family=Pacifico&display=swap");
 
 * {
     padding: 0;
     margin: 0;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
@@ -39,6 +39,7 @@ section {
     body {
         font-size: 20px;
     }
+
     section {
         padding: 3rem;
         padding-top: 0;
@@ -70,11 +71,7 @@ section {
     }
 }
 
-
-
-
 /*NAV STYLES-------------------------------------------------------------------------------------------------------------------------------*/
-
 h3 a {
     font-family: 'Pacifico', cursive;
     padding: 1rem;
@@ -84,10 +81,15 @@ h3 a {
     color: #0A0A0A;
 }
 
-
 nav, nav ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     background-color: #76AF61;
 }
@@ -114,6 +116,7 @@ nav {
     nav {
         padding: .5rem 3rem;
     }
+
     .nav_item {
         margin-left: 2rem;
     }
@@ -123,7 +126,6 @@ nav {
     nav {
         padding: .5rem 3rem;
     }
-    
 }
 
 @media only screen and (min-width: 1440px) {
@@ -139,12 +141,7 @@ nav {
 }
 
 /*FRONTPAGE STYLES-------------------------------------------------------------------------------------------------------------------------------*/
-
-
 /*SPLASH SECTION*/
-
-
-
 .headline {
     position: relative;
     height: 70vh;
@@ -157,9 +154,9 @@ nav {
     top: 5%;
     left: -10%;
     opacity: .13;
+    -ms-writing-mode: tb-lr;
     writing-mode: vertical-lr;
     text-orientation: upright;
-
 }
 
 .headline_hook {
@@ -180,6 +177,7 @@ nav {
 
 @media only screen and (min-width: 1280px) {
     .headline_watermark {
+        -ms-writing-mode: unset;
         writing-mode: unset;
         text-orientation: unset;
         font-size: 39vw;
@@ -200,15 +198,21 @@ nav {
     }
 }
 
-
 /*BUDGET SECTION*/
-
 .frontpage_section2 {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
-
 }
 
 .circle {
@@ -219,8 +223,14 @@ nav {
     border-radius: 50%;
     margin: 0 auto;
     margin-bottom: 3.5rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -231,20 +241,26 @@ nav {
 }
 
 .section2_explainText {
-   font-weight: 800;
-   font-size: 2em;
-   margin-bottom: 7rem;
+    font-weight: 800;
+    font-size: 2em;
+    margin-bottom: 7rem;
 }
 
-
-
 /*Liz Section*/
-
 .frontpage_section3 {
     padding: 0 1rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
 }
 
@@ -268,10 +284,7 @@ nav {
     }
 }
 
-
-
 /*Sign-in/up-------------------------------------------------------------------------------------------------------------------------------*/
-
 .signing_title {
     color: #0A0A0A;
     font-size: 2.5em;
@@ -300,14 +313,11 @@ input {
     cursor: pointer;
 }
 
-
 .signing_checkbox {
     width: 100%;
 }
 
-
 /*Dashboard STYLES-------------------------------------------------------------------------------------------------------------------------------*/
-
 .dashboard_headline {
     margin-top: 2rem;
     text-align: center;
@@ -332,7 +342,10 @@ input {
 }
 
 .expenseType_actions {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-pack: distribute;
     justify-content: space-around;
     margin-bottom: 3rem;
 }
@@ -348,8 +361,8 @@ input {
     padding: 0 1.5rem;
     margin-bottom: 2.5rem;
 }
-/*Table STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 
+/*Table STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 table {
     border-collapse: collapse;
     width: 100%;
@@ -382,12 +395,12 @@ th {
     padding: 1em .5em;
     text-transform: uppercase;
 }
+
 @media only screen and (min-width: 1024px) {
     table {
         font-size: 1rem;
     }
 }
-
 
 /*UTILITY STYLES-------------------------------------------------------------------------------------------------------------------------------*/
 .btn {
@@ -428,9 +441,18 @@ strong {
 }
 
 .flex_column-center {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -448,21 +470,36 @@ strong {
     margin-top: 3em;
 }
 
-@keyframes loading {
+@-webkit-keyframes loading {
     0% {
-        opacity: 0
+        opacity: 0;
     }
 
     50% {
-        opacity: 1
+        opacity: 1;
     }
 
     100% {
-        opacity: 0
+        opacity: 0;
+    }
+}
+
+@keyframes loading {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
     }
 }
 
 .loading {
+    -webkit-animation: loading 700ms infinite ease-in-out;
     animation: loading 700ms infinite ease-in-out;
     text-align: center;
     font-size: 1.5em;
@@ -484,4 +521,4 @@ strong {
         min-width: 8rem;
     }
 }
-
+/*# sourceMappingURL=site.css.map */
