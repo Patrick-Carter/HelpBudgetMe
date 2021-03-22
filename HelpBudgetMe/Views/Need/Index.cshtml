@@ -79,7 +79,7 @@
         loadMore.classList.add("hidden");
         loading.classList.remove("hidden");
 
-        fetch('https://localhost:44357/api/GetMoreNeed', {
+        fetch('/api/GetMoreNeed', {
             method: "POST",
             body: totalTabelItems,
             headers: {
