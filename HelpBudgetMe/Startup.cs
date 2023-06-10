@@ -29,12 +29,12 @@ namespace HelpBudgetMe
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_CONNECTIONSTRING");
+            var connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_CONNECTIONSTRING");
 
             services.AddControllers();
 
             services.AddDbContext<ApplicationDBContext>(options =>
-                options.UseMySql(connectionString)
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
             ); 
 
             services.AddControllersWithViews();
